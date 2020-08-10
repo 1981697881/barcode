@@ -8,11 +8,8 @@ const map = {
   'resource': () => import('@/views/resource/index'),
   'dashboard': () => import('@/views/dashboard/index'),
 
-  'commodity': () => import('@/views/resource/commoditylist/index'),
-  'rate': () => import('@/views/resource/ratelist/index'),
-  'stock': () => import('@/views/resource/stocklist/index'),
-  'warehouse': () => import('@/views/resource/warehouse/index'),
   'processRoute': () => import('@/views/resource/processRoute/index'),
+  'pricingProcess': () => import('@/views/process/pricingProcess/index'),
 
  /* 'system': () => import('@/views/system/index'),
   'permissions': () => import('@/views/system/permissions/index'),

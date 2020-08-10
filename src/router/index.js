@@ -73,6 +73,22 @@ export const StaticRouterMap = [{
         title: '工艺路线'
       },
     }]
+  }, {
+    path: '/process',
+    component: Layout,
+    name: 'Process',
+    meta: {
+      title: '工序管理',
+      icon: "component"
+    },
+    children: [{
+      path: 'pricingProcess',
+      component: () => import('@/views/process/pricingProcess/index'),
+      name: 'PricingProcess',
+      meta: {
+        title: '工序调价表'
+      },
+    }]
   },
   /*{
     path: '/system',
