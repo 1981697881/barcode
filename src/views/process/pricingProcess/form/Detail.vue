@@ -8,47 +8,10 @@
               <el-input v-model="form1.id"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item :label="'物料代码'" >
-              <el-input v-model="form1.FNumber" disabled></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="7">
-            <el-form-item :label="'物料名称'" >
-              <el-input v-model="form1.FName" disabled></el-input>
-            </el-form-item>
-          </el-col>
-          <!--<el-col :span="7">
-          <el-form-item :label="'物料名称'" prop="itemId">
-            <el-select v-model="form1.itemId" filterable placeholder="请选择" style="width: 100%" @change="changeItem">
-              <el-option
-                v-for="(t,i) in pArray"
-                :key="i"
-                :label="t.FName"
-                :value="t.FItemID">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>-->
-          <el-col :span="4">
-            <el-form-item :label-width="'0px'" >
-              <el-button @click="setRow">选择物料</el-button>
-            </el-form-item>
-          </el-col>
         </el-col>
           <el-col :span="24">
             <el-col :span="12">
-              <el-form-item :label="'创建人'" >
-                <el-input v-model="form1.username" disabled></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item :label="'创建人'" style="display: none;">
-                <el-input v-model="form1.userId"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item :label="'创建时间'" prop="createTime">
+              <el-form-item :label="'日期'" prop="createTime">
                 <div class="block" >
                   <el-date-picker
                     v-model="form1.createTime"
@@ -59,35 +22,13 @@
                 </div>
               </el-form-item>
             </el-col>
-          </el-col>
-          <el-col :span="24">
             <el-col :span="12">
-              <el-form-item :label="'规格型号'" >
-                <el-input  v-model="form1.FModel" disabled></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item :label="'计量单位'" >
-                <el-input v-model="form1.FUnitName" disabled></el-input>
-              </el-form-item>
+              <el-form-item :label="'单据号'" >
+                <el-input v-model="form1.FModel" disabled></el-input>
+                </el-form-item>
             </el-col>
           </el-col>
           <el-col :span="24">
-            <el-col :span="12">
-              <el-form-item :label="'图号'" >
-                <el-input  v-model="form1.FChartNumber" disabled></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item :label="'备注'" >
-                <el-input v-model="form1.note"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-col>
-          <el-col :span="24">
-            <!--<div style="margin-top: 20px;margin-bottom: 10px">
-              <el-button @click="setRow">添加</el-button>
-            </div>-->
             <el-table el-table style="height: 300px" :data="list" border size="mini" :highlight-current-row="true">
               <el-table-column
                 v-for="(t,i) in columns"
@@ -108,36 +49,6 @@
                   </el-input>
                   <el-input size="mini" v-if="t.name == 'price'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input>
-                  <!--<el-input size="mini" v-if="t.name == 'processNumber'" placeholder="请输入内容" v-model="sel[t.name]">
-                  </el-input>
-                  <el-input size="mini" v-if="t.name == 'controlCodeNumber'" placeholder="请输入内容" v-model="sel[t.name]">
-                  </el-input>
-                  <el-input size="mini" v-if="t.name == 'processTeamNumber'" placeholder="请输入内容" v-model="sel[t.name]">
-                  </el-input>-->
-                  <el-select size="mini" v-if="t.name == 'processName'" v-model="sel[t.name]" placeholder="请选择" @change="changeProcessId($event, sel)">
-                    <el-option
-                      v-for="(t,i) in plArray"
-                      :key="i"
-                      :label="t.FName"
-                      :value="t.FName">
-                    </el-option>
-                  </el-select>
-                  <el-select size="mini" v-if="t.name == 'controlCodeName'" v-model="sel[t.name]" placeholder="请选择" @change="changeCodeTeamId($event, sel)">
-                    <el-option
-                      v-for="(t,i) in pzArray"
-                      :key="i"
-                      :label="t.FName"
-                      :value="t.FName">
-                    </el-option>
-                  </el-select>
-                  <el-select size="mini" v-if="t.name == 'processTeamName'" v-model="sel[t.name]" placeholder="请选择" @change="changeProcessTeamId($event, sel)">
-                    <el-option
-                      v-for="(t,i) in psArray"
-                      :key="i"
-                      :label="t.FName"
-                      :value="t.FName">
-                    </el-option>
-                  </el-select>
                 </span>
                 <span v-else>{{scope.row[t.name]}}</span>
               </template>
@@ -164,7 +75,7 @@
     </el-form>
     <el-dialog
       :visible.sync="visible"
-      title="物料信息"
+      title="工艺路线"
       v-if="visible"
       :width="'60%'"
       destroy-on-close
@@ -173,25 +84,20 @@
       <el-form :model="form2" :rules="rules2" ref="form2" label-width="80px" :size="'mini'">
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item :label="'物料名称'">
+            <el-form-item :label="'工艺路线单据'">
               <el-input v-model="form2.name" ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item :label="'物料代码'">
+            <el-form-item :label="'物料'">
               <el-input v-model="form2.number" ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item :label="'规格'">
+            <el-form-item :label="'工序'">
               <el-input v-model="form2.model" ></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item :label="'图号'">
-              <el-input v-model="form2.chartNumber" ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="2">
@@ -207,6 +113,7 @@
               :loading="loading"
               :list="list2"
               index
+              type
               @row-click="rowClick"
               @dblclick="dblclick"
               @handle-size="handleSize"
@@ -269,26 +176,34 @@
         list: [],
         list2: {},
         columns2: [
+          { text: "工艺路线单据号", name: "FName" },
           { text: "物料名称", name: "FName" },
           { text: "物料代码", name: "FNumber" },
           { text: "规格型号", name: "FModel" },
           { text: "计量单位", name: "FUnitName" },
-          { text: "图号", name: "FChartNumber" }
+          { text: "工序代码", name: "" },
+          { text: "工序代码", name: "FUnitName" },
+          { text: "工序代码", name: "FUnitName" },
+          { text: "工序控制码", name: "FChartNumber" },
+          { text: "工序倍数", name: "FChartNumber" },
+          { text: "工序原单价", name: "FChartNumber" },
         ],
         columns: [
           { text: "id", name: "id", default: false },
-          { text: "工序顺序号", name: "orderNo" },
+          { text: "工艺路线单据号", name: "orderNo" },
+          { text: "物料名称", name: "FName" },
+          { text: "物料代码", name: "FNumber" },
+          { text: "规格型号", name: "FModel" },
+          { text: "计量单位", name: "FUnitName" },
           { text: "工序代码", name: "processNumber" },
           { text: "工序名称", name: "processName" },
-          { text: "工序id", name: "processId", default: false },
           { text: "作业说明", name: "description" },
-          { text: "工序控制码", name: "controlCodeId", default: false },
           { text: "工序控制码", name: "controlCodeName"},
           { text: "工序倍数", name: "diploid" },
-          { text: "工序单价", name: "price" },
-          { text: "班组代码", name: "processTeamNumber" },
-          { text: "班组id", name: "processTeamId", default: false },
-          { text: "班组", name: "processTeamName" },
+          { text: "工序原单价", name: "price" },
+          { text: "工序变更后单价", name: "processTeamNumber" },
+          { text: "生效日期", name: "processTeamName" },
+          { text: "失效日期", name: "processTeamName" },
         ],
         checkObj: {},
         pArray: [],
@@ -453,33 +368,6 @@
             this.form1.FUnitName = item.FUnitName
             this.form1.FModel = item.FModel
             this.form1.FChartNumber = item.FChartNumber
-          }
-        })
-      },
-      changeProcessId(val, row) {
-         const me = this
-        this.plArray.forEach((item, index) => {
-          if(item.FName == val) {
-            me.$set(row,'processId', item.FItemID);
-            me.$set(row,'processNumber', item.FNumber);
-          }
-        })
-        console.log(row)
-      },
-      changeProcessTeamId(val, row) {
-        const me = this
-        this.psArray.forEach((item, index) => {
-          if(item.FName == val) {
-            me.$set(row, 'processTeamId', item.FItemID);
-            me.$set(row, 'processTeamNumber', item.FNumber);
-          }
-        })
-      },
-      changeCodeTeamId(val, row) {
-        const me = this
-        this.pzArray.forEach((item, index) => {
-          if(item.FName == val) {
-            me.$set(row,'controlCodeId', item.FItemID);
           }
         })
       },

@@ -12,7 +12,7 @@
       :visible.sync="visible"
       title="基本信息"
       v-if="visible"
-      :width="'80%'"
+      :width="'90%'"
       destroy-on-close
     >
       <info @hideDialog="hideWindow" @uploadList="upload" :listInfo="listInfo"></info>
