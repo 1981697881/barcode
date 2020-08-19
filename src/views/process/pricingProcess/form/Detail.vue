@@ -69,7 +69,7 @@
             </el-table>
           </el-col>
         <el-col :span="24">
-          <div class="el-table-add-row" style="width: 99.2%;" @click="addMaster()"><span>+ 添加</span></div>
+          <div class="el-table-add-row" style="width: 99.2%;" @click="setRow()"><span>+ 添加</span></div>
         </el-col>
       </el-row>
     </el-form>
