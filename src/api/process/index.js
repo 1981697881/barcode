@@ -16,4 +16,31 @@ export function getAdjustList(data, query) {
     data: query
   })
 }
+// 新增工艺路线
+export function processAdjustAdd(data) {
+  // 查询分页数据
+  const url = '/adjust/add'
+  return request({
+    headers: {
+      'authorization': getToken('barrx'),
+      'Content-Type': 'application/json'
+    },
+    url: url,
+    method: 'post',
+    data: data
+  })
+}// 修改工艺路线
+export function processAdjustUpdate(data) {
+  // 查询分页数据
+  const url = '/adjust/update'
+  return request({
+    headers: {
+      'authorization': getToken('barrx'),
+      'Content-Type': 'application/json'
+    },
+    url: url,
+    method: 'post',
+    data: data
+  })
+}
 

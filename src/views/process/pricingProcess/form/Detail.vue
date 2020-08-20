@@ -41,14 +41,28 @@
               >
               <template slot-scope="scope">
                 <span v-if="scope.row.isSet">
-                  <el-input size="mini" v-if="t.name == 'orderNo'" placeholder="请输入内容" v-model="sel[t.name]">
+                  <el-input size="mini" v-if="t.name == 'adjPrice'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input>
-                  <el-input size="mini" v-if="t.name == 'description'" placeholder="请输入内容" v-model="sel[t.name]">
-                  </el-input>
-                  <el-input size="mini" v-if="t.name == 'diploid'" placeholder="请输入内容" v-model="sel[t.name]">
-                  </el-input>
-                  <el-input size="mini" v-if="t.name == 'price'" placeholder="请输入内容" v-model="sel[t.name]">
-                  </el-input>
+                  <div class="block">
+                  <el-date-picker
+                    v-if="t.name == 'effectiveDate'"
+                    v-model="sel[t.name]"
+                    type="date"
+                    size="mini"
+                    value-format="yyyy-MM-dd"
+                    placeholder="选择日期">
+                  </el-date-picker>
+                </div>
+                  <div class="block">
+                  <el-date-picker
+                    v-if="t.name == 'expiryDate'"
+                    v-model="sel[t.name]"
+                    type="date"
+                    size="mini"
+                    value-format="yyyy-MM-dd"
+                    placeholder="选择日期">
+                  </el-date-picker>
+                </div>
                 </span>
                 <span v-else>{{scope.row[t.name]}}</span>
               </template>
@@ -81,23 +95,23 @@
       destroy-on-close
       append-to-body
     >
-      <el-form :model="form2" :rules="rules2" ref="form2" label-width="80px" :size="'mini'">
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item :label="'工艺路线单据'">
-              <el-input v-model="form2.name" ></el-input>
+      <el-form :model="form2" :rules="rules2" ref="form2" label-width="100px" :size="'mini'">
+              <el-row :gutter="20">
+                <el-col :span="12">
+                  <el-form-item :label="'工艺路线单据'">
+                    <el-input v-model="form2.routeNo" ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="'物料'">
-              <el-input v-model="form2.number" ></el-input>
+              <el-input v-model="form2.name" ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item :label="'工序'">
-              <el-input v-model="form2.model" ></el-input>
+              <el-input v-model="form2.processName" ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="2">
@@ -108,14 +122,12 @@
           <el-col :span="24" >
             <list
               class="list-main"
-              height="300px"
+              height="350px"
               :columns="columns2"
               :loading="loading"
               :list="list2"
               index
               type
-              @row-click="rowClick"
-              @dblclick="dblclick"
               @handle-size="handleSize"
               @handle-current="handleCurrent"
             />
@@ -123,7 +135,7 @@
         </el-row>
       </el-form>
       <div slot="footer" style="text-align:center;">
-        <el-button type="primary" @click="confirm">确认</el-button>
+        <el-button type="primary" @click="addMaster">确认</el-button>
       </div>
     </el-dialog>
     <div slot="footer" style="text-align:center;padding-top: 15px">
@@ -133,7 +145,10 @@
 </template>
 
 <script>
-  import {teamList, controlList, processList, processRouteAdd, getItemList, processRouteUpdate, routeListInfo, getItemsList} from "@/api/basic/index";
+
+  import { mapGetters } from "vuex";
+  import { getRouteList } from "@/api/basic/index";
+  import { processAdjustAdd, processAdjustUpdate } from "@/api/process/index";
   import {
     getPer
   } from '@/utils/auth'
@@ -141,6 +156,9 @@
   export default {
     components: {
       List
+    },
+    computed: {
+      ...mapGetters(["selections"])
     },
     props: {
       listInfo: {
@@ -154,8 +172,7 @@
         sel: null, // 选中行
         form2: {
           name: null,
-          model: null,
-          chartNumber: null,
+          routeNo: null,
           number: null
         },
         plArray: [],
@@ -172,25 +189,24 @@
           FChartNumber: null,
         },
         visible: null,
-        pidS: [],
         list: [],
         list2: {},
         columns2: [
-          { text: "工艺路线单据号", name: "FName" },
-          { text: "物料名称", name: "FName" },
-          { text: "物料代码", name: "FNumber" },
-          { text: "规格型号", name: "FModel" },
-          { text: "计量单位", name: "FUnitName" },
-          { text: "工序代码", name: "" },
-          { text: "工序代码", name: "FUnitName" },
-          { text: "工序代码", name: "FUnitName" },
-          { text: "工序控制码", name: "FChartNumber" },
-          { text: "工序倍数", name: "FChartNumber" },
-          { text: "工序原单价", name: "FChartNumber" },
+          { text: "工艺路线单据号", name: "routeNo" },
+          { text: "物料名称", name: "name" },
+          { text: "物料代码", name: "number" },
+          { text: "规格型号", name: "model" },
+          { text: "计量单位", name: "unitName" },
+          { text: "工序代码", name: "processNumber" },
+          { text: "工序名称", name: "processName" },
+          { text: "作业说明", name: "description" },
+          { text: "工序控制码", name: "controlCodeName" },
+          { text: "工序倍数", name: "diploid" },
+          { text: "工序原单价", name: "price" },
         ],
         columns: [
           { text: "id", name: "id", default: false },
-          { text: "工艺路线单据号", name: "orderNo" },
+          { text: "工艺路线单据号", name: "routeNo" },
           { text: "物料名称", name: "FName" },
           { text: "物料代码", name: "FNumber" },
           { text: "规格型号", name: "FModel" },
@@ -201,9 +217,9 @@
           { text: "工序控制码", name: "controlCodeName"},
           { text: "工序倍数", name: "diploid" },
           { text: "工序原单价", name: "price" },
-          { text: "工序变更后单价", name: "processTeamNumber" },
-          { text: "生效日期", name: "processTeamName" },
-          { text: "失效日期", name: "processTeamName" },
+          { text: "工序变更后单价", name: "adjPrice" },
+          { text: "生效日期", name: "effectiveDate" },
+          { text: "失效日期", name: "expiryDate" },
         ],
         checkObj: {},
         pArray: [],
@@ -261,10 +277,31 @@
       }
     },
     methods: {
-      //监听单击某一行
-      rowClick(obj) {
-        console.log(obj)
-       this.checkObj = obj.row
+      // 查询前后三天日期
+      getDay(date, day){
+        var today = new Date();
+        var targetday_milliseconds=today.getTime() + 1000*60*60*24*day
+        today.setTime(targetday_milliseconds) //注意，这行是关键代码
+        var tYear = today.getFullYear()
+        var tMonth = today.getMonth()
+        var tDate = today.getDate()
+        var getDay = today.getDay()
+        tMonth = this.doHandleMonth(tMonth + 1)
+        tDate = this.doHandleMonth(tDate)
+        var weeks = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
+        var week = weeks[getDay]
+        return {
+          day: tDate,
+          week: week,
+          date: tYear + "-" + tMonth + "-" + tDate
+        }
+      },
+      doHandleMonth(month) {
+        var m = month;
+        if(month.toString().length == 1) {
+          m = "0" + month;
+        }
+        return m;
       },
       // 查询条件过滤
       qFilter() {
@@ -280,7 +317,7 @@
         pageSize: this.list2.pageSize || 50
       }) {
         this.loading = true;
-        getItemsList(data, val).then(res => {
+        getRouteList(data, val).then(res => {
           this.loading = false;
           this.list2 = res.data;
         });
@@ -309,34 +346,58 @@
        },
       //添加
       addMaster() {
-        for (let i of this.list) {
-          if (i.isSet) return this.$message.warning("请先保存当前编辑项");
+        const me = this
+        if(me.selections.length>0){
+          let selections = me.selections
+          selections.forEach((item, index) =>{
+            let obj = {}
+            obj.processNumber = item.processNumber
+            obj.processName = item.processName
+            obj.processId = item.processId
+            obj.description = item.description
+            obj.controlCodeId = item.controlCodeId
+            obj.controlCodeName = item.controlCodeName
+            obj.diploid = item.diploid
+            obj.price = item.price
+            obj.FName = item.name
+            obj.isSet = false
+            obj.FNumber = item.number
+            obj.itemId = item.itemId
+            obj.processRouteDetailId = item.processRouteDetailId
+            obj.FModel = item.model
+            obj.FUnitName = item.unitName
+            obj.adjPrice = 0
+            obj.effectiveDate = me.getDay('', 0).date
+            obj.expiryDate = me.getDay('', 0).date
+            me.sel = JSON.parse(JSON.stringify(obj));
+            me.list.push(obj)
+          })
+          me.visible = false
+          //this.sel = JSON.parse(JSON.stringify(j));
+        }else{
+          me.$message.warning("请选择行");
         }
-        this.cIndex += 10
-        let j = {isSet: true, orderNo: this.cIndex, processNumber: '', processName: '', processId: '', description: '', controlCodeId: '', controlCodeName: '', diploid: 1, price: '', processTeamNumber: '', processTeamId: '', processTeamName: ''};
-        this.list.push(j);
-        this.sel = JSON.parse(JSON.stringify(j));
+
       },
       //修改
       pwdChange(row, index, cg) {
         //点击修改 判断是否已经保存所有操作
         for (let i of this.list) {
-          if (i.isSet && i.processId != row.processId) {
+          if (i.isSet && i.processRouteId != row.processRouteId) {
             this.$message.warning("请先保存当前编辑项");
             return false;
           }
         }
         //是否是取消操作
         if (!cg) {
-          if (!this.sel.processId) this.list.splice(index, 1);
+          if (!this.sel.processRouteId) this.list.splice(index, 1);
           return row.isSet = !row.isSet;
         }
+        console.log(row.isSet)
         //提交数据
         if (row.isSet) {
-          //项目是模拟请求操作  自己修改下
           const sel = this.sel
-          console.log(sel.processName == null || sel.processName == '')
-            if((sel.orderNo == null || sel.orderNo == '') || (sel.processName == null || sel.processName == '') || (sel.controlCodeName == null || sel.controlCodeName == '') || (sel.diploid == null || sel.diploid == '') || (sel.processTeamName == null || sel.processTeamName == '')){
+            if((sel.adjPrice == null || sel.adjPrice === '') || (sel.effectiveDate == null || sel.effectiveDate === '') || (sel.expiryDate == null || sel.expiryDate === '')){
                 return this.$message({
                   type: 'error',
                   message: "请输入必填项!"
@@ -372,67 +433,42 @@
         })
       },
       fetchFormat() {
-        processList().then(res => {
-          this.plArray = res.data;
-        });
-        controlList().then(res => {
-          this.pzArray = res.data;
-        });
-        teamList().then(res => {
-          this.psArray = res.data;
-        });
-        getItemList().then(res => {
-          this.pArray = res.data;
-        });
+
       },
       setList(val) {
         this.list = []
         this.list.push(val)
       },
       setRow() {
-        this.visible = true
-      },
-      dblclick(obj, index) {
-        if (obj.row.FItemID) {
-          this.form1.itemId = obj.row.FItemID
-          this.form1.FName = obj.row.FName
-          this.form1.FNumber = obj.row.FNumber
-          this.form1.FUnitName = obj.row.FUnitName
-          this.form1.FModel = obj.row.FModel
-          this.form1.FChartNumber = obj.row.FChartNumber
-          this.visible = false
-        } else {
-          this.$message({
-            message: "无选中数据",
-            type: "warning"
-          })
+        for (let i of this.list) {
+          if (i.isSet) return this.$message.warning("请先保存当前编辑项");
         }
-       //this.pwdChange(scope.row,scope.$index,true)
+        this.visible = true
       },
       saveData() {
         this.$refs["form1"].validate((valid) => {
           //判断必填项
           if (valid) {
+            let arrrar = []
             this.list.forEach((item, index) => {
-              item.id = item.processRouteDetailId
-             delete item.ProcessNumber
-             delete item.processRouteDetailId
-             delete item.ProcessTeamNumber
-             delete item.isSet
-             delete item.processRouteId
+              let obj = {}
+              //obj.adjDate = item.
+              obj.adjPrice = item.adjPrice
+              obj.effectiveDate = item.effectiveDate
+              obj.expiryDate = item.expiryDate
+              obj.itemId = item.itemId
+              obj.routeDetailId = item.processRouteDetailId
+              arrrar.push(obj)
             })
             //修改
-            delete this.form1.createTime
-            this.form1.detailList = this.list
-            console.log(JSON.stringify(this.form1))
             if (typeof (this.form1.id) != undefined && this.form1.id != null) {
-              processRouteUpdate(this.form1).then(res => {
+              processAdjustUpdate(arrrar).then(res => {
                 this.$emit('hideDialog')
                 this.$emit('uploadList')
               });
               //保存
             }else{
-              processRouteAdd(this.form1).then(res => {
+              processAdjustAdd(arrrar).then(res => {
                 this.$emit('hideDialog')
                 this.$emit('uploadList')
               });
@@ -441,19 +477,6 @@
             return false
           }
         })
-      },
-      getItemInfo(FItemID){
-        const me = this
-        getItemList().then(reso => {
-          reso.data.forEach((item, index) => {
-            if(item.FItemID == FItemID){
-              me.form1.FNumber = item.FNumber
-              me.form1.FUnitName = item.FUnitName
-              me.form1.FModel = item.FModel
-              me.form1.FChartNumber = item.FChartNumber
-            }
-          })
-        });
       },
       fetchData(val) {
         const me = this
@@ -476,22 +499,6 @@
           }
         });
       },
-      confirm() {
-        if (this.checkObj.FItemID) {
-          this.form1.itemId = this.checkObj.FItemID
-          this.form1.FName = this.checkObj.FName
-          this.form1.FNumber = this.checkObj.FNumber
-          this.form1.FUnitName = this.checkObj.FUnitName
-          this.form1.FModel = this.checkObj.FModel
-          this.form1.FChartNumber = this.checkObj.FChartNumber
-          this.visible = false
-        } else {
-          this.$message({
-            message: "无选中数据",
-            type: "warning"
-          })
-        }
-      }
     }
   };
 </script>
