@@ -461,6 +461,7 @@
               arrrar.push(obj)
             })
             //修改
+            console.log(JSON.stringify(arrrar))
             if (typeof (this.form1.id) != undefined && this.form1.id != null) {
               processAdjustUpdate(arrrar).then(res => {
                 this.$emit('hideDialog')

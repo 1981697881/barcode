@@ -43,11 +43,11 @@ export default {
         { text: "作业说明", name: "description" },
         { text: "工序控制码", name: "controlCodeName" },
         { text: "工序倍数", name: "diploid" },
-        { text: "工序原单价", name: "price" },
-        { text: "工序变更后单价", name: "" },
-        { text: "生效日期", name: "" },
-        { text: "失效日期", name: "" },
-        { text: "调价日期", name: "" },
+        { text: "工序原单价", name: "pastPrice" },
+        { text: "工序变更后单价", name: "adjPrice" },
+        { text: "生效日期", name: "effectiveDate" },
+        { text: "失效日期", name: "expiryDate" },
+        { text: "调价日期", name: "createTime" },
       ]
     };
   },
