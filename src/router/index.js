@@ -82,6 +82,13 @@ export const StaticRouterMap = [{
       icon: "component"
     },
     children: [{
+      path: 'productionTask',
+      component: () => import('@/views/process/productionTask/index'),
+      name: 'ProductionTask',
+      meta: {
+        title: '计划生产任务单'
+      },
+    },{
       path: 'pricingProcess',
       component: () => import('@/views/process/pricingProcess/index'),
       name: 'PricingProcess',

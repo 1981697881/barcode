@@ -3,17 +3,16 @@
     <!--<Tree class="list-tree" @handler-node="handlerNode" />-->
     <div class="list-containerOther">
       <div>
-        <tabs-bar ref="tabs" @addUnit="handlerTabs" @uploadList="upload" @showTable="loadList" @showDialog="handlerDialog" @queryBtn="query"/>
+        <tabs-bar ref="tabs" @showDialog="handlerDialog" @uploadList="upload"  @queryBtn="query"/>
       </div>
-      <list  ref="list" @uploadList="upload" @showDialog="handlerDialog"/>
+      <list  ref="list"  @showDialog="handlerDialog" @uploadList="uploadPage"/>
     </div>
-
-
   </div>
 </template>
 
 <script>
 import { TabsBar, List } from "./components";
+
 
 export default {
   components: {
@@ -29,31 +28,22 @@ export default {
     };
   },
     mounted() {
-       // this.$refs.list.fetchData()
+      this.$refs.list.fetchData(this.$refs.tabs.qFilter())
     },
   methods: {
-    saveData(){
-
-    },
-    loadList(val) {
-      this.$refs.list.uploadPr(this.$refs.tabs.qFilter())
-    },
     handlerDialog(obj){
       if(obj)this.fid = obj.fid
       this.visible = true
     },
-    handlerNode(node) {
-      console.log(node.data)
-      this.$refs.list.fetchData(node.data.fid,node.data.type)
-    },
-    handlerTabs(prId) {
-      this.$refs.list.addUnit(prId);
-    },
-      //更新列表
-      upload() {
-        this.$refs.list.uploadPr(this.$refs.tabs.qFilter())
-      },
     // 查询
+    uploadPage(val) {
+      this.$refs.list.fetchData(this.$refs.tabs.qFilter())
+    },
+    //更新列表
+    upload() {
+      this.$refs.list.fetchData(this.$refs.tabs.qFilter())
+    },
+    //查询
     query(val) {
       this.$refs.list.uploadPr(this.$refs.tabs.qFilter())
     }

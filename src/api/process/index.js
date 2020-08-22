@@ -29,7 +29,8 @@ export function processAdjustAdd(data) {
     method: 'post',
     data: data
   })
-}// 修改工艺路线
+}
+// 修改工艺路线
 export function processAdjustUpdate(data) {
   // 查询分页数据
   const url = '/adjust/update'
@@ -43,4 +44,53 @@ export function processAdjustUpdate(data) {
     data: data
   })
 }
+// 查询详情
+export function listByRouteAdjustId(data) {
+  const url = '/adjust/listByRouteAdjustId'
+  return request({
+    headers: {
+      'authorization': getToken('barrx'),
+    },
+    url: url,
+    method: 'get',
+    params: data
+  })
+}// 查询详情
+export function listByRouteAdjustNo(data) {
+  const url = '/adjust/listByRouteAdjustNo'
+  return request({
+    headers: {
+      'authorization': getToken('barrx'),
+    },
+    url: url,
+    method: 'get',
+    params: data
+  })
+}
+// 查询生产任务单
+export function planProductTask(data) {
+  const url = '/planProductTask/list'
+  return request({
+    headers: {
+      'authorization': getToken('barrx'),
+      'Content-Type': 'application/json'
+    },
+    url: url,
+    method: 'post',
+    data: data
+  })
+}// 投放
+export function addPlanProductTask(data) {
+  const url = '/planProductTask/addList'
+  return request({
+    headers: {
+      'authorization': getToken('barrx'),
+      'Content-Type': 'application/json'
+    },
+    url: url,
+    method: 'post',
+    data: data
+  })
+}
+
 

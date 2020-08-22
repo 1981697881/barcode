@@ -72,7 +72,7 @@
                   <span class="el-tag el-tag--info el-tag--mini" style="cursor: pointer;" @click="pwdChange(scope.row,scope.$index,true)">
                     {{scope.row.isSet?'确定':"修改"}}
                   </span>
-                  <span v-if="!scope.row.isSet" class="el-tag el-tag--danger el-tag--mini" @click="deleteRow(scope.$index,list)" style="cursor: pointer;">
+                  <span v-if="!scope.row.isSet" class="el-tag el-tag--danger el-tag--mini" @click="deleteRow(scope.row,scope.$index,list)" style="cursor: pointer;">
                     删除
                   </span>
                   <span v-else class="el-tag  el-tag--mini" style="cursor: pointer;" @click="pwdChange(scope.row,scope.$index,false)">
@@ -148,7 +148,7 @@
 
   import { mapGetters } from "vuex";
   import { getRouteList } from "@/api/basic/index";
-  import { processAdjustAdd, processAdjustUpdate } from "@/api/process/index";
+  import { processAdjustAdd, processAdjustUpdate, listByRouteAdjustNo } from "@/api/process/index";
   import {
     getPer
   } from '@/utils/auth'
@@ -207,22 +207,23 @@
         columns: [
           { text: "id", name: "id", default: false },
           { text: "工艺路线单据号", name: "routeNo" },
-          { text: "物料名称", name: "FName" },
-          { text: "物料代码", name: "FNumber" },
-          { text: "规格型号", name: "FModel" },
-          { text: "计量单位", name: "FUnitName" },
+          { text: "物料名称", name: "name" },
+          { text: "物料代码", name: "number" },
+          { text: "规格型号", name: "model" },
+          { text: "计量单位", name: "unitName" },
           { text: "工序代码", name: "processNumber" },
           { text: "工序名称", name: "processName" },
           { text: "作业说明", name: "description" },
           { text: "工序控制码", name: "controlCodeName"},
           { text: "工序倍数", name: "diploid" },
-          { text: "工序原单价", name: "price" },
+          { text: "工序原单价", name: "pastPrice" },
           { text: "工序变更后单价", name: "adjPrice" },
           { text: "生效日期", name: "effectiveDate" },
           { text: "失效日期", name: "expiryDate" },
         ],
         checkObj: {},
         pArray: [],
+        result: [],
         rules: {
           note: [
             {required: true, message: '请输入值', trigger: 'blur'},
@@ -269,7 +270,8 @@
     mounted() {
       this.fetchFormat()
       if(this.listInfo) {
-        this.fetchData({processRouteId: this.listInfo.processRouteId})
+        this.form1.createTime = this.listInfo.createTime
+        this.fetchData({adjustNo: this.listInfo.adjustNo})
       } else {
         this.getTime()
         this.form1.username = getPer('barun')
@@ -349,28 +351,37 @@
         const me = this
         if(me.selections.length>0){
           let selections = me.selections
+          let list = me.list
           selections.forEach((item, index) =>{
-            let obj = {}
-            obj.processNumber = item.processNumber
-            obj.processName = item.processName
-            obj.processId = item.processId
-            obj.description = item.description
-            obj.controlCodeId = item.controlCodeId
-            obj.controlCodeName = item.controlCodeName
-            obj.diploid = item.diploid
-            obj.price = item.price
-            obj.FName = item.name
-            obj.isSet = false
-            obj.FNumber = item.number
-            obj.itemId = item.itemId
-            obj.processRouteDetailId = item.processRouteDetailId
-            obj.FModel = item.model
-            obj.FUnitName = item.unitName
-            obj.adjPrice = 0
-            obj.effectiveDate = me.getDay('', 0).date
-            obj.expiryDate = me.getDay('', 0).date
-            me.sel = JSON.parse(JSON.stringify(obj));
-            me.list.push(obj)
+            console.log(me.result.indexOf(item.processRouteDetailId) == -1)
+            console.log(me.result)
+            if(me.result.indexOf(item.processRouteDetailId) == -1){
+              let obj = {}
+              obj.processNumber = item.processNumber
+              obj.processName = item.processName
+              obj.processId = item.processId
+              obj.description = item.description
+              obj.controlCodeId = item.controlCodeId
+              obj.controlCodeName = item.controlCodeName
+              obj.diploid = item.diploid
+              obj.pastPrice = item.price
+              obj.name = item.name
+              obj.processRouteId = item.processRouteId
+              obj.isSet = false
+              obj.number = item.number
+              obj.itemId = item.itemId
+              obj.processRouteDetailId = item.processRouteDetailId
+              obj.model = item.model
+              obj.FUnitName = item.unitName
+              obj.adjPrice = 0
+              obj.effectiveDate = me.getDay('', 0).date
+              obj.expiryDate = me.getDay('', 0).date
+              me.sel = JSON.parse(JSON.stringify(obj));
+              me.result.push(item.processRouteDetailId)
+              me.list.push(obj)
+            }else{
+              me.$message.warning("存在重复项，只添加不重复项");
+            }
           })
           me.visible = false
           //this.sel = JSON.parse(JSON.stringify(j));
@@ -383,14 +394,14 @@
       pwdChange(row, index, cg) {
         //点击修改 判断是否已经保存所有操作
         for (let i of this.list) {
-          if (i.isSet && i.processRouteId != row.processRouteId) {
+          if (i.isSet && i.processRouteDetailId != row.processRouteDetailId) {
             this.$message.warning("请先保存当前编辑项");
             return false;
           }
         }
         //是否是取消操作
         if (!cg) {
-          if (!this.sel.processRouteId) this.list.splice(index, 1);
+          if (!this.sel.processRouteDetailId) this.list.splice(index, 1);
           return row.isSet = !row.isSet;
         }
         console.log(row.isSet)
@@ -419,7 +430,14 @@
         }
       },
       //删除带确认区 单行删除
-      deleteRow(index, rows) {
+      deleteRow(row, index, rows) {
+        this.result.forEach((item, index2) =>{
+          if(row.processRouteDetailId == item){
+            this.result.splice(index2,1);
+          }
+        })
+        console.log(this.result)
+        console.log(row)
         rows.splice(index, 1);
       },
       changeItem(val) {
@@ -482,21 +500,16 @@
       fetchData(val) {
         const me = this
         me.loading = true
-        routeListInfo(val).then(res => {
+        listByRouteAdjustNo(val).then(res => {
           if(res.success) {
-            console.log(res)
             this.loading = false
-            this.form1.itemId = res.data[0].itemId
-            this.form1.FName = res.data[0].name
-            this.form1.id = res.data[0].processRouteId
-            this.form1.username = res.data[0].username
-            this.form1.userId = res.data[0].userId
-            this.form1.createTime = res.data[0].createTime
-            this.form1.FNumber = res.data[0].number
-            this.form1.FUnitName = res.data[0].unitName
-            this.form1.FModel = res.data[0].model
-            this.form1.FChartNumber = res.data[0].chartNumber
-            this.list = res.data
+            let data = res.data
+            data.forEach((item, index) => {
+              this.result.push(item.routeDetailId)
+              item.processRouteDetailId = item.routeDetailId
+            })
+            this.list = data
+
           }
         });
       },

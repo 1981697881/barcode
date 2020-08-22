@@ -60,14 +60,14 @@
 
     methods: {
       Delivery() {
-        if (this.clickData.processRouteId) {
+        if (this.clickData.routeAdjustId) {
           this.$confirm('是否删除（' + this.clickData.name + '），删除后将无法恢复?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
             this.$emit('delList', {
-              processRouteId: this.clickData.processRouteId
+              routeAdjustId: this.clickData.routeAdjustId
             })
           }).catch(() => {
             this.$message({
@@ -83,7 +83,7 @@
         }
       },
       alter() {
-        if (this.clickData.processRouteId) {
+        if (this.clickData.adjustNo) {
           this.$emit('showDialog', this.clickData)
         } else {
           this.$message({

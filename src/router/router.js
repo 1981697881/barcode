@@ -10,6 +10,7 @@ const map = {
 
   'processRoute': () => import('@/views/resource/processRoute/index'),
   'pricingProcess': () => import('@/views/process/pricingProcess/index'),
+  'productionTask': () => import('@/views/process/productionTask/index'),
 
  /* 'system': () => import('@/views/system/index'),
   'permissions': () => import('@/views/system/permissions/index'),
