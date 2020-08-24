@@ -7,32 +7,47 @@
       </div>
       <list  ref="list"  @showDialog="handlerDialog" @uploadList="uploadPage"/>
     </div>
+    <el-dialog
+      :visible.sync="visible"
+      title="基本信息"
+      v-if="visible"
+      :width="'50%'"
+      destroy-on-close
+    >
+      <info @hideDialog="hideWindow" @uploadList="upload" :listInfo="listInfo"></info>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { TabsBar, List } from "./components";
+  import { TabsBar, List } from "./components";
+  import { Info } from "./form";
 
-
-export default {
-  components: {
-    TabsBar,
-    List,
-  },
+  export default {
+    components: {
+      TabsBar,
+      List,
+      Info
+    },
   data() {
     return {
       visible: null,
-      fid: null,
-      treeId: null, // null
-      floorId: null
+      listInfo: null,
     };
   },
     mounted() {
       this.$refs.list.fetchData(this.$refs.tabs.qFilter())
     },
   methods: {
+    hideWindow(val) {
+      this.visible = val
+    },
     handlerDialog(obj){
-      if(obj)this.fid = obj.fid
+      this.listInfo = null
+      if(obj) {
+        const info = JSON.parse(JSON.stringify(obj))
+        this.listInfo = info
+      }
       this.visible = true
     },
     // 查询

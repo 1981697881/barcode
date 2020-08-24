@@ -6,6 +6,8 @@
       :loading="loading"
       :list="list"
       index
+       @row-click="rowClick"
+       @dblclick="dblclick"
       @handle-size="handleSize"
       @handle-current="handleCurrent"
     />
@@ -35,11 +37,23 @@ export default {
       q: null,
       type: null,
       columns: [
-          { text: "客户名称", name: "account" },
-        { text: "商品名称", name: "goodName" },
-        { text: "商品编号", name: "goodCode" },
-        { text: "规格", name: "standard" },
-        { text: "单位", name: "unitOfMea" },
+          { text: "生产计划单号", name: "FICMONo" },
+        { text: "销售订单号", name: "FOrderNo" },
+        { text: "流程卡号", name: "FCardNo" },
+        { text: "金蝶号", name: "FKDNo" },
+        { text: "生产批次号", name: "FBatchNO" },
+        { text: "产品编码", name: "" },
+        { text: "工程名称", name: "FPrjName" },
+        { text: "产品名称", name: "FPrdName" },
+        { text: "规格型号", name: "FModel" },
+        { text: "BOM编号", name: "" },
+        { text: "订单量", name: "FAuxQty" },
+        { text: "计划量", name: "FPlanQty" },
+        { text: "本次投放量", name: "" },
+        { text: "实际生产量", name: "FActQty" },
+        { text: "剩余量", name: "FRemainQty" },
+        { text: "计划开工日期", name: "FPlanCommitDate" },
+        { text: "计划交付日期", name: "FPlanFinishDate" },
       ]
     };
   },
@@ -57,13 +71,14 @@ export default {
           this.list.current = val;
           this.$emit('uploadList')
       },
-   /* dblclick(obj) {
-      const data = {
-        fid : obj.row.fid,
-        type : obj.row.type
-      }
-      this.$emit('showDialog',data)
-    },*/
+    dblclick(obj) {
+      console.log(obj)
+      this.$emit('showDialog', obj.row)
+    },
+    //监听单击某一行
+    rowClick(obj) {
+      this.$store.dispatch("list/setClickData", obj.row);
+    },
     uploadPr(val, data = {
       pageNum: 1,
       pageSize: this.list.size || 50
