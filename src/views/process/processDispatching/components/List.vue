@@ -1,0 +1,111 @@
+<template>
+  <div>
+    <list
+       class="list-main"
+      :columns="columns"
+      :loading="loading"
+      :list="list"
+      index
+       @row-click="rowClick"
+       @dblclick="dblclick"
+      @handle-size="handleSize"
+      @handle-current="handleCurrent"
+    />
+  </div>
+</template>
+
+<script>
+import { mapGetters } from "vuex";
+import { getAdjustList } from "@/api/process/index";
+import List from "@/components/List";
+export default {
+  components: {
+    List
+  },
+  computed: {
+    ...mapGetters(["node"])
+  },
+  data() {
+    return {
+      loading: false,
+      list: {},
+      type: null,
+      goodName: null,
+      prId: null,
+      columns: [
+        { text: "任务单号", name: "createTime" },
+        { text: "生产班组", name: "adjustNo" },
+        { text: "开工日期", name: "" },
+        { text: "生产者", name: "routeNo" },
+        { text: "卡号", name: "number" },
+        { text: "金蝶号", name: "name" },
+        { text: "生产批次号", name: "model" },
+        { text: "产品编码", name: "unitName" },
+        { text: "工程名称", name: "processNumber" },
+        { text: "产品名称", name: "processName" },
+        { text: "规格型号", name: "description" },
+        { text: "工序名称", name: "controlCodeName" },
+        { text: "订单量", name: "diploid" },
+        { text: "剩余量", name: "pastPrice" },
+        { text: "计划量", name: "adjPrice" },
+        { text: "工序计划量", name: "effectiveDate" },
+        { text: "派工量", name: "expiryDate" },
+        { text: "实际生产量", name: "expiryDate" },
+        { text: "合格数", name: "expiryDate" },
+        { text: "员工签名", name: "expiryDate" },
+        { text: "确认人", name: "expiryDate" },
+        { text: "确认时间", name: "expiryDate" },
+        { text: "审核人", name: "expiryDate" },
+        { text: "审核时间", name: "expiryDate" },
+        { text: "复核人", name: "expiryDate" },
+        { text: "复核时间", name: "expiryDate" },
+      ]
+    };
+  },
+  created() {
+
+  },
+  methods: {
+    //监听每页显示几条
+    handleSize(val) {
+      this.list.pageSize = val
+      this.$emit('uploadList')
+    },
+    //监听当前页
+    handleCurrent(val) {
+      this.list.pageNum = val;
+      this.$emit('uploadList')
+    },
+    dblclick(obj) {
+      console.log(obj)
+      this.$emit('showDialog', obj.row)
+    },
+    //监听单击某一行
+    rowClick(obj) {
+      this.$store.dispatch("list/setClickData", obj.row);
+    },
+    uploadPr(val) {
+      this.fetchData(val,{
+        pageNum: 1,
+        pageSize: this.list.pageSize || 50
+      })
+    },
+    fetchData(val, data = {
+      pageNum: this.list.pageNum || 1,
+      pageSize: this.list.pageSize || 50
+    }) {
+      this.loading = true;
+      getAdjustList(data, val).then(res => {
+        this.loading = false;
+        this.list = res.data;
+      });
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.list-main {
+  height: calc(100vh - 300px);
+}
+</style>

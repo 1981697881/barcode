@@ -3,7 +3,24 @@
     <el-form v-model="search" :size="'mini'" :label-width="'70px'">
       <el-row :gutter="12">
         <el-col :span="6">
-          <el-form-item :label="'日期'">
+          <el-form-item :label="'派工日期'">
+            <el-date-picker
+              v-model="value"
+              type="daterange"
+              align="right"
+              style="width: auto"
+              class="input-class"
+              unlink-panels
+              range-separator="至"
+              value-format="yyyy-MM-dd"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              :picker-options="pickerOptions">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item :label="'汇报日期'">
             <el-date-picker
               v-model="value"
               type="daterange"
@@ -20,28 +37,45 @@
           </el-form-item>
         </el-col>
         <el-col :span="4">
-          <el-form-item :label="'单据号'">
+          <el-form-item :label="'生产任务单号'" :label-width="'110px'">
             <el-input v-model="search.adjustNo" />
           </el-form-item>
         </el-col><el-col :span="4">
-        <el-form-item :label="'物料编码'">
-          <el-input v-model="search.productNumber" />
-        </el-form-item>
-      </el-col>
+          <el-form-item :label="'产品编码'">
+            <el-input v-model="search.productNumber" />
+          </el-form-item>
+        </el-col>
         <el-col :span="4">
-          <el-form-item :label="'物料名称'">
+          <el-form-item :label="'产品名称'">
             <el-input v-model="search.productName" placeholder=""/>
           </el-form-item>
         </el-col>
         <el-col :span="4">
           <el-form-item :label="'工序'">
-            <el-select v-model="search.processNumber" filterable class="width-full" placeholder="请选择工序" @change="changeCheck">
+            <el-select v-model="search.processNumber" filterable class="width-full" placeholder="请选择工序" @change="changeCheck1">
               <el-option :label="t.FName" :value="t.FNumber" v-for="(t,i) in plArray" :key="i"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="4">
-          <el-form-item :label="'工序路线单据号'" :label-width="'110px'">
+          <el-form-item :label="'班组'">
+            <el-select v-model="search.processNumber" filterable class="width-full" placeholder="请选择班组" @change="changeCheck2">
+              <el-option :label="t.FName" :value="t.FNumber" v-for="(t,i) in psArray" :key="i"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item :label="'生产者'">
+            <el-input v-model="search.routeNo" placeholder=""/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item :label="'卡号/金蝶号'" :label-width="'110px'">
+            <el-input v-model="search.routeNo" placeholder=""/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item :label="'汇报员工'">
             <el-input v-model="search.routeNo" placeholder=""/>
           </el-form-item>
         </el-col>
@@ -49,8 +83,7 @@
           <el-button :size="'mini'" type="primary" @click="query" icon="el-icon-search">查询</el-button>
         </el-col>
         <el-button-group style="float:right">
-          <el-button :size="'mini'" type="primary" icon="el-icon-plus" @click="handleAdd">新增</el-button>
-          <el-button :size="'mini'" type="primary" icon="el-icon-edit" @click="alter">修改</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-edit" @click="alter">派工</el-button>
          <!-- <el-button :size="'mini'" type="primary" icon="el-icon-delete" @click="Delivery">删除</el-button>-->
           <el-button :size="'mini'" type="primary" icon="el-icon-refresh" @click="upload">刷新</el-button>
         </el-button-group>
@@ -61,7 +94,7 @@
 <script>
   import { mapGetters } from "vuex";
   import {getToken} from '@/utils/auth'
-  import {processList} from "@/api/basic/index";
+  import {processList, teamList} from "@/api/basic/index";
   export default {
     components: {},
     computed: {
@@ -101,6 +134,7 @@
         },
         value: [],
         plArray: [],
+        psArray: [],
         isUpload: null,
         search: {
           adjustNo: null,
@@ -119,13 +153,18 @@
       this.fetchFormat()
     },
     methods: {
-      // 切换仓库
-      changeCheck(val) {
+      changeCheck1(val) {
+        this.$emit('queryBtn', this.qFilter())
+      },
+      changeCheck2(val) {
         this.$emit('queryBtn', this.qFilter())
       },
       fetchFormat() {
         processList().then(res => {
           this.plArray = res.data;
+        });
+        teamList().then(res => {
+          this.psArray = res.data;
         });
       },
       // 查询前后三天日期

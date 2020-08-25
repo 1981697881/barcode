@@ -95,6 +95,13 @@ export const StaticRouterMap = [{
       meta: {
         title: '工序调价表'
       },
+    },{
+      path: 'processDispatching',
+      component: () => import('@/views/process/processDispatching/index'),
+      name: 'ProcessDispatching',
+      meta: {
+        title: '工序派工单'
+      },
     }]
   },
   /*{

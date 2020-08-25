@@ -200,7 +200,7 @@
           //判断必填项
           if (valid) {
             console.log(this.form)
-            addPlanProductTask(this.form).then(res => {
+            addPlanProductTask([this.form]).then(res => {
               this.$emit('uploadList')
               this.$emit('hideDialog')
             });
