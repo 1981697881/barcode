@@ -90,28 +90,11 @@
             >
               <template slot-scope="scope">
                 <span v-if="scope.row.isSet">
-                  <el-input size="mini" v-if="t.name == 'adjPrice'" placeholder="请输入内容" v-model="sel[t.name]">
+                  <el-input size="mini" v-if="t.name == 'routeNo'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input>
-                  <div class="block">
-                  <el-date-picker
-                    v-if="t.name == 'effectiveDate'"
-                    v-model="sel[t.name]"
-                    type="date"
-                    size="mini"
-                    value-format="yyyy-MM-dd"
-                    placeholder="选择日期">
-                  </el-date-picker>
-                </div>
-                  <div class="block">
-                  <el-date-picker
-                    v-if="t.name == 'expiryDate'"
-                    v-model="sel[t.name]"
-                    type="date"
-                    size="mini"
-                    value-format="yyyy-MM-dd"
-                    placeholder="选择日期">
-                  </el-date-picker>
-                </div>
+                  <el-input size="mini" v-if="t.name == 'name'" placeholder="请输入内容" v-model="sel[t.name]">
+                  </el-input>
+
                 </span>
                 <span v-else>{{scope.row[t.name]}}</span>
               </template>
@@ -184,11 +167,8 @@
         visible: null,
         list: [],
         columns: [
-          { text: "工序序号", name: "routeNo" },
-          { text: "工序名称", name: "name" },
-          { text: "金蝶号", name: "number" },
-          { text: "生产批次号", name: "model" },
-
+          { text: "指派人员", name: "routeNo" },
+          { text: "派工量", name: "name" },
         ],
         checkObj: {},
         pArray: [],

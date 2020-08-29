@@ -63,28 +63,10 @@
               >
               <template slot-scope="scope">
                 <span v-if="scope.row.isSet">
-                  <el-input size="mini" v-if="t.name == 'adjPrice'" placeholder="请输入内容" v-model="sel[t.name]">
+                  <el-input size="mini" v-if="t.name == 'number'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input>
-                  <div class="block">
-                  <el-date-picker
-                    v-if="t.name == 'effectiveDate'"
-                    v-model="sel[t.name]"
-                    type="date"
-                    size="mini"
-                    value-format="yyyy-MM-dd"
-                    placeholder="选择日期">
-                  </el-date-picker>
-                </div>
-                  <div class="block">
-                  <el-date-picker
-                    v-if="t.name == 'expiryDate'"
-                    v-model="sel[t.name]"
-                    type="date"
-                    size="mini"
-                    value-format="yyyy-MM-dd"
-                    placeholder="选择日期">
-                  </el-date-picker>
-                </div>
+                  <el-input size="mini" v-if="t.name == 'model'" placeholder="请输入内容" v-model="sel[t.name]">
+                  </el-input>
                 </span>
                 <span v-else>{{scope.row[t.name]}}</span>
               </template>

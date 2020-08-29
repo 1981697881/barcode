@@ -52,6 +52,7 @@ export default {
         { text: "本次投放量", name: "" },
         { text: "实际生产量", name: "FActQty" },
         { text: "剩余量", name: "FRemainQty" },
+        { text: "已投放量", name: "FPutNum" },
         { text: "计划开工日期", name: "FPlanCommitDate" },
         { text: "计划交付日期", name: "FPlanFinishDate" },
       ]
