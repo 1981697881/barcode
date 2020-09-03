@@ -24,7 +24,7 @@
         :prop="t.name"
         v-if="t.default!=undefined?t.default:true"
         :label="t.text"
-        :width="t.width?t.width:(selfAdaption?'':'120px')"
+        :width="t.width?t.width:(selfAdaption?'':'150px')"
         show-overflow-tooltip
         align="center"
       ></el-table-column>

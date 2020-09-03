@@ -2,7 +2,7 @@
   <div class="list-header">
     <el-form v-model="search" :size="'mini'" :label-width="'70px'">
       <el-row :gutter="12">
-        <el-col :span="6">
+        <el-col :span="7">
           <el-form-item :label="'派工日期'">
             <el-date-picker
               v-model="value"
@@ -19,10 +19,10 @@
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="7">
           <el-form-item :label="'汇报日期'">
             <el-date-picker
-              v-model="value"
+              v-model="valueT"
               type="daterange"
               align="right"
               style="width: auto"
@@ -133,6 +133,7 @@
           }]
         },
         value: [],
+        valueT: [],
         plArray: [],
         psArray: [],
         isUpload: null,
@@ -148,6 +149,8 @@
     created: function() {
       this.value[0] = this.getDay('', -15).date
       this.value[1] = this.getDay('', 0).date
+      this.valueT[0] = this.getDay('', -15).date
+      this.valueT[1] = this.getDay('', 0).date
     },
     mounted() {
       this.fetchFormat()
@@ -237,14 +240,16 @@
         this.search.productNumber = ''
         this.search.processNumber = ''
         this.value = []
+        this.valueT = []
         this.value[0] = this.getDay('', -15).date
         this.value[1] = this.getDay('', 0).date
+        this.valueT[0] = this.getDay('', -15).date
+        this.valueT[1] = this.getDay('', 0).date
         this.$emit('uploadList')
       },
       // 查询条件过滤
       qFilter() {
         let obj = {}
-        console.log( this.search)
         this.search.adjustNo != null && this.search.adjustNo != '' ? obj.adjustNo = this.search.adjustNo : null
         this.search.routeNo != null && this.search.routeNo != '' ? obj.routeNo = this.search.routeNo : null
         this.search.productName != null && this.search.productName != '' ? obj.productName = this.search.productName : null

@@ -6,6 +6,7 @@
       :loading="loading"
       :list="list"
       index
+       type
        @row-click="rowClick"
        @dblclick="dblclick"
       @handle-size="handleSize"

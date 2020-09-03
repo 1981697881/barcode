@@ -2,8 +2,8 @@
   <div class="list-header">
     <el-form v-model="search" :size="'mini'" :label-width="'70px'">
       <el-row :gutter="12">
-        <el-col :span="6">
-          <el-form-item :label="'日期'">
+        <el-col :span="7">
+          <el-form-item :label="'日期'" :label-width="'40px'">
             <el-date-picker
               v-model="value"
               type="daterange"

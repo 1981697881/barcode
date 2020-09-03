@@ -8,12 +8,17 @@
               <el-input v-model="form1.id"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item :label="'物料代码'" >
               <el-input v-model="form1.FNumber" disabled></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="7">
+          <el-col :span="4">
+            <el-form-item :label-width="'0px'" >
+              <el-button @click="setRow">选择物料</el-button>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item :label="'物料名称'" >
               <el-input v-model="form1.FName" disabled></el-input>
             </el-form-item>
@@ -30,11 +35,7 @@
             </el-select>
           </el-form-item>
         </el-col>-->
-          <el-col :span="4">
-            <el-form-item :label-width="'0px'" >
-              <el-button @click="setRow">选择物料</el-button>
-            </el-form-item>
-          </el-col>
+
         </el-col>
           <el-col :span="24">
             <el-col :span="12">

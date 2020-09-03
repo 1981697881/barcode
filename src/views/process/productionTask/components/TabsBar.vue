@@ -2,8 +2,8 @@
   <div class="list-header">
     <el-form v-model="search" :size="'mini'" :label-width="'80px'">
       <el-row :gutter="10">
-        <el-col :span="6">
-          <el-form-item :label="'日期'">
+        <el-col :span="7">
+          <el-form-item :label="'日期'" :label-width="'40px'">
             <el-date-picker
               v-model="value"
               type="daterange"
@@ -143,12 +143,12 @@ export default {
       return obj
     },
     handleAdd(){
-      if (this.clickData.RowNumber) {
+      if (this.selections.length>0) {
           let selections = this.selections
        /* selections.forEach((item, index) =>{
           console.log(item)
         })*/
-        this.$emit('showDialog', this.clickData)
+        this.$emit('showDialog', this.selections)
 
       } else {
         this.$message({
