@@ -56,23 +56,17 @@
         </el-col>
         <el-col :span="24">
           <el-col :span="8">
-            <el-form-item :label="'工序序号'" >
-              <el-input v-model="form1.FModel" disabled></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
             <el-form-item :label="'工序名称'" >
               <el-input v-model="form1.FModel" disabled></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item :label="'剩余量'" >
+            <el-form-item :label="'计划量'" >
               <el-input v-model="form1.FModel" disabled></el-input>
             </el-form-item>
           </el-col>
-        </el-col><el-col :span="24">
           <el-col :span="8">
-            <el-form-item :label="'开工日期'" >
+            <el-form-item :label="'派工数量'" >
               <el-input v-model="form1.FModel" disabled></el-input>
             </el-form-item>
           </el-col>
@@ -168,7 +162,8 @@
         list: [],
         columns: [
           { text: "指派人员", name: "routeNo" },
-          { text: "派工量", name: "name" },
+          { text: "生产数量", name: "name" },
+          { text: "合计数量", name: "name" },
         ],
         checkObj: {},
         pArray: [],

@@ -67,6 +67,7 @@ export function listByRouteAdjustNo(data) {
     params: data
   })
 }
+
 // 查询生产任务单
 export function planProductTask(data) {
   const url = '/planProductTask/list'
@@ -79,7 +80,35 @@ export function planProductTask(data) {
     method: 'post',
     data: data
   })
-}// 投放
+}
+// 查询工序任务单
+export function getProductWorkList(data, query) {
+  // 查询分页数据
+  const url = '/productWork/list/' + data.pageNum + '/' + data.pageSize
+  return request({
+    headers: {
+      'authorization': getToken('barrx'),
+      'Content-Type': 'application/json'
+    },
+    url: url,
+    method: 'post',
+    data: query
+  })
+}// 查询班组人员派工单
+export function getProductWorkDispatchList(data, query) {
+  // 查询分页数据
+  const url = '/productWorkDispatch/selectList/' + data.pageNum + '/' + data.pageSize
+  return request({
+    headers: {
+      'authorization': getToken('barrx'),
+      'Content-Type': 'application/json'
+    },
+    url: url,
+    method: 'post',
+    data: query
+  })
+}
+// 投放
 export function addPlanProductTask(data) {
   const url = '/planProductTask/addList'
   return request({

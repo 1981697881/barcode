@@ -2,40 +2,7 @@
   <div class="list-header">
     <el-form v-model="search" :size="'mini'" :label-width="'70px'">
       <el-row :gutter="12">
-        <el-col :span="7">
-          <el-form-item :label="'派工日期'">
-            <el-date-picker
-              v-model="value"
-              type="daterange"
-              align="right"
-              style="width: auto"
-              class="input-class"
-              unlink-panels
-              range-separator="至"
-              value-format="yyyy-MM-dd"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :picker-options="pickerOptions">
-            </el-date-picker>
-          </el-form-item>
-        </el-col>
-        <el-col :span="7">
-          <el-form-item :label="'汇报日期'">
-            <el-date-picker
-              v-model="valueT"
-              type="daterange"
-              align="right"
-              style="width: auto"
-              class="input-class"
-              unlink-panels
-              range-separator="至"
-              value-format="yyyy-MM-dd"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :picker-options="pickerOptions">
-            </el-date-picker>
-          </el-form-item>
-        </el-col>
+
         <el-col :span="4">
           <el-form-item :label="'生产任务单号'" :label-width="'110px'">
             <el-input v-model="search.workNo" />
@@ -58,32 +25,15 @@
           </el-form-item>
         </el-col>
         <el-col :span="4">
-          <el-form-item :label="'班组'">
-            <el-select v-model="search.processTeamName" filterable class="width-full" placeholder="请选择班组" @change="changeCheck2">
-              <el-option :label="t.FName" :value="t.FName" v-for="(t,i) in psArray" :key="i"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="4">
-          <el-form-item :label="'生产者'">
-            <el-input v-model="search.dispatchName" placeholder=""/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="4">
           <el-form-item :label="'卡号/金蝶号'" :label-width="'110px'">
             <el-input v-model="search.kingDeeNo" placeholder=""/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="4">
-          <el-form-item :label="'汇报员工'">
-            <el-input v-model="search.routeNo" placeholder=""/>
           </el-form-item>
         </el-col>
         <el-col :span="2">
           <el-button :size="'mini'" type="primary" @click="query" icon="el-icon-search">查询</el-button>
         </el-col>
         <el-button-group style="float:right">
-          <el-button :size="'mini'" type="primary" icon="el-icon-edit" @click="alter">汇报</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-edit" @click="alter">派工</el-button>
          <!-- <el-button :size="'mini'" type="primary" icon="el-icon-delete" @click="Delivery">删除</el-button>-->
           <el-button :size="'mini'" type="primary" icon="el-icon-refresh" @click="upload">刷新</el-button>
         </el-button-group>
@@ -139,11 +89,9 @@
         isUpload: null,
         search: {
           workNo: null,
-          routeNo: null,
+          kingDeeNo: null,
           productName: null,
           productNumber: null,
-          dispatchName: null,
-          processTeamName: null,
           processId: null
         }
       };
@@ -237,34 +185,23 @@
       },
       upload() {
         this.search.workNo = ''
-        this.search.routeNo = ''
+        this.search.kingDeeNo = ''
         this.search.productName = ''
         this.search.productNumber = ''
         this.search.processId = ''
-        this.search.processTeamName = ''
-        this.search.dispatchName = ''
         this.value = []
-        this.valueT = []
         this.value[0] = this.getDay('', -15).date
         this.value[1] = this.getDay('', 0).date
-        this.valueT[0] = this.getDay('', -15).date
-        this.valueT[1] = this.getDay('', 0).date
         this.$emit('uploadList')
       },
       // 查询条件过滤
       qFilter() {
         let obj = {}
-        this.value != null && this.value != undefined ? obj.dispatchEndDate = this.value[1] : null
-        this.value != null && this.value != undefined ? obj.dispatchStartDate = this.value[0] : null
-        this.valueT != null && this.valueT != undefined ? obj.reportEndDate = this.valueT[1] : null
-        this.valueT != null && this.valueT != undefined ? obj.reportStartDate = this.valueT[0] : null
-        this.search.adjustNo != null && this.search.adjustNo != '' ? obj.adjustNo = this.search.adjustNo : null
-        this.search.routeNo != null && this.search.routeNo != '' ? obj.routeNo = this.search.routeNo : null
+        this.search.workNo != null && this.search.workNo != '' ? obj.workNo = this.search.workNo : null
+        this.search.kingDeeNo != null && this.search.kingDeeNo != '' ? obj.routeNo = this.search.kingDeeNo : null
         this.search.productName != null && this.search.productName != '' ? obj.productName = this.search.productName : null
         this.search.productNumber != null && this.search.productNumber != '' ? obj.productNumber = this.search.productNumber : null
-        this.search.processNumber != null && this.search.processNumber != '' ? obj.processNumber = this.search.processNumber : null
-        this.search.processTeamName != null && this.search.processTeamName != '' ? obj.processTeamName = this.search.processTeamName : null
-        this.search.dispatchName != null && this.search.dispatchName != '' ? obj.dispatchName = this.search.dispatchName : null
+        this.search.processId != null && this.search.processId != '' ? obj.processId = this.search.processId : null
         return obj
       },
       handleAdd(){

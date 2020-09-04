@@ -71,12 +71,12 @@
             </el-form-item>
           </el-col>
         </el-col><el-col :span="24">
-        <el-col :span="8">
-          <el-form-item :label="'开工日期'" >
-            <el-input v-model="form1.FModel"></el-input>
-          </el-form-item>
+          <el-col :span="8">
+            <el-form-item :label="'开工日期'" >
+              <el-input v-model="form1.FModel"></el-input>
+            </el-form-item>
+          </el-col>
         </el-col>
-      </el-col>
         <el-col :span="24">
           <el-table el-table style="height: 300px" :data="list" border size="mini" :highlight-current-row="true">
             <el-table-column

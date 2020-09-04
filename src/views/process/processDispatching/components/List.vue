@@ -16,7 +16,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getAdjustList } from "@/api/process/index";
+import { getProductWorkDispatchList } from "@/api/process/index";
 import List from "@/components/List";
 export default {
   components: {
@@ -33,32 +33,28 @@ export default {
       goodName: null,
       prId: null,
       columns: [
-        { text: "任务单号", name: "createTime" },
-        { text: "生产班组", name: "adjustNo" },
-        { text: "开工日期", name: "" },
-        { text: "生产者", name: "routeNo" },
-        { text: "卡号", name: "number" },
-        { text: "金蝶号", name: "name" },
-        { text: "生产批次号", name: "model" },
-        { text: "产品编码", name: "unitName" },
-        { text: "工程名称", name: "processNumber" },
-        { text: "产品名称", name: "processName" },
-        { text: "规格型号", name: "description" },
-        { text: "工序名称", name: "controlCodeName" },
-        { text: "订单量", name: "diploid" },
-        { text: "剩余量", name: "pastPrice" },
-        { text: "计划量", name: "adjPrice" },
-        { text: "工序计划量", name: "effectiveDate" },
-        { text: "派工量", name: "expiryDate" },
-        { text: "实际生产量", name: "expiryDate" },
-        { text: "合格数", name: "expiryDate" },
-        { text: "员工签名", name: "expiryDate" },
-        { text: "确认人", name: "expiryDate" },
-        { text: "确认时间", name: "expiryDate" },
-        { text: "审核人", name: "expiryDate" },
-        { text: "审核时间", name: "expiryDate" },
-        { text: "复核人", name: "expiryDate" },
-        { text: "复核时间", name: "expiryDate" },
+        { text: "任务单号", name: "workNo" },
+        { text: "生产班组", name: "processTeamName" },
+        { text: "开工日期", name: "workDate" },
+        { text: "生产者", name: "dispatchName" },
+        { text: "卡号", name: "processCard" },
+        { text: "金蝶号", name: "kingDeeNo" },
+        { text: "生产批次号", name: "lotNo" },
+        { text: "产品编码", name: "productNumber" },
+        { text: "工程名称", name: "projectName" },
+        { text: "产品名称", name: "productName" },
+        { text: "规格型号", name: "model" },
+        { text: "工序名称", name: "processName" },
+        { text: "订单量", name: "orderNum" },
+        { text: "剩余量", name: "residueNum" },
+        { text: "计划量", name: "planNum" },
+        { text: "工序计划量", name: "processPlanNum" },
+        { text: "派工量", name: "dispatchNum" },
+        { text: "实际生产量", name: "actualProductNum" },
+        { text: "合格数", name: "qualifiedNum" },
+        { text: "员工签名", name: "reportName" },
+        { text: "审核人", name: "auditName" },
+        { text: "审核时间", name: "auditTime" },
       ]
     };
   },
@@ -95,7 +91,7 @@ export default {
       pageSize: this.list.pageSize || 50
     }) {
       this.loading = true;
-      getAdjustList(data, val).then(res => {
+      getProductWorkDispatchList(data, val).then(res => {
         this.loading = false;
         this.list = res.data;
       });

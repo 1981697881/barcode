@@ -6,7 +6,6 @@
       :loading="loading"
       :list="list"
       index
-       type
        @row-click="rowClick"
        @dblclick="dblclick"
       @handle-size="handleSize"
@@ -17,7 +16,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getRouteList } from "@/api/basic/index";
+import { getProductWorkList } from "@/api/process/index";
 import List from "@/components/List";
 export default {
   components: {
@@ -34,24 +33,24 @@ export default {
       goodName: null,
       prId: null,
       columns: [
-        { text: "processRouteId", name: "processRouteId",default:false },
-        { text: "物料代码", name: "number" },
-        { text: "物料名称", name: "name" },
+        { text: "任务单号", name: "workNo" },
+        { text: "生产班组", name: "processTeamName" },
+        { text: "开工日期", name: "" },
+        { text: "卡号", name: "processCard" },
+        { text: "金蝶号", name: "kingDeeNo" },
+        { text: "生产批次号", name: "lotNo" },
+        { text: "产品编码", name: "productNumber" },
+        { text: "工程名称", name: "projectName" },
+        { text: "产品名称", name: "productName" },
         { text: "规格型号", name: "model" },
-        { text: "图号", name: "chartNumber" },
-        { text: "工序顺序号", name: "orderNo" },
-        { text: "工序代码", name: "processNumber" },
         { text: "工序名称", name: "processName" },
-        { text: "作业说明", name: "description" },
-        { text: "工序控制码", name: "controlCodeName" },
-        { text: "工序倍数", name: "diploid" },
-        { text: "工序单价", name: "price" },
-        { text: "班组代码", name: "processTeamNumber" },
-        { text: "班组", name: "processTeamName" },
-        { text: "创建日期", name: "createTime" },
-        { text: "创建人", name: "username" },
-        // { text: "审核日期", name: "" },
-        // { text: "审核人", name: "" },
+        { text: "订单量", name: "orderNum" },
+        { text: "剩余量", name: "residueNum" },
+        { text: "计划量", name: "planNum" },
+        { text: "已派工量", name: "alreadyDispatchNum" },
+        { text: "审核人", name: "auditName" },
+        { text: "审核时间", name: "auditTime" },
+
       ]
     };
   },
@@ -88,7 +87,7 @@ export default {
       pageSize: this.list.pageSize || 50
     }) {
       this.loading = true;
-      getRouteList(data, val).then(res => {
+      getProductWorkList(data, val).then(res => {
         this.loading = false;
         this.list = res.data;
       });
@@ -99,6 +98,6 @@ export default {
 
 <style lang="scss" scoped>
 .list-main {
-  height: calc(100vh - 300px);
+  height: calc(100vh - 350px);
 }
 </style>

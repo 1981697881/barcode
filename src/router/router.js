@@ -12,6 +12,7 @@ const map = {
   'pricingProcess': () => import('@/views/process/pricingProcess/index'),
   'productionTask': () => import('@/views/process/productionTask/index'),
   'processDispatching': () => import('@/views/process/processDispatching/index'),
+  'mission': () => import('@/views/process/mission/index'),
 
  /* 'system': () => import('@/views/system/index'),
   'permissions': () => import('@/views/system/permissions/index'),

@@ -222,6 +222,7 @@
     </el-dialog>
     <div slot="footer" style="text-align:center;padding-top: 15px">
       <el-button type="primary" @click="saveData">保存</el-button>
+      <el-button type="success" @click="pasteData">粘贴</el-button>
     </div>
   </div>
 </template>
@@ -232,9 +233,13 @@
     getPer
   } from '@/utils/auth'
   import List from "@/components/List"
+  import {mapGetters} from "vuex";
   export default {
     components: {
       List
+    },
+    computed: {
+      ...mapGetters(["selections"])
     },
     props: {
       listInfo: {
@@ -349,7 +354,6 @@
     methods: {
       //监听单击某一行
       rowClick(obj) {
-        console.log(obj)
        this.checkObj = obj.row
       },
       // 查询条件过滤
@@ -521,6 +525,24 @@
           })
         }
        //this.pwdChange(scope.row,scope.$index,true)
+      },
+      pasteData() {
+        let selection = this.selections
+        selection.forEach((item, index) => {
+          let obj = {}
+          obj.orderNo = item.orderNo
+          obj.processNumber = item.processNumber
+          obj.processName = item.processName
+          obj.description = item.description
+          obj.controlCodeId = item.controlCodeId
+          obj.controlCodeName = item.controlCodeName
+          obj.diploid = item.diploid
+          obj.price = item.price
+          obj.processTeamNumber = item.processTeamNumber
+          obj.processTeamId = item.processTeamId
+          obj.processTeamName = item.processTeamName
+          this.list.push(obj)
+        })
       },
       saveData() {
         this.$refs["form1"].validate((valid) => {

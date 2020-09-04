@@ -28,6 +28,7 @@
         <el-button-group style="float:right">
           <el-button :size="'mini'" type="primary" icon="el-icon-plus" @click="handleAdd">新增</el-button>
           <el-button :size="'mini'" type="primary" icon="el-icon-edit" @click="alter">修改</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-news" @click="handleCopy">复制</el-button>
           <el-upload
             name="processRoute"
             :on-success="uploadSuccess"
@@ -132,6 +133,19 @@
       alter() {
         if (this.clickData.processRouteId) {
           this.$emit('showDialog', this.clickData)
+        } else {
+          this.$message({
+            message: "无选中行",
+            type: "warning"
+          })
+        }
+      },
+      handleCopy() {
+        if (this.selections.length) {
+          this.$message({
+            message: "复制成功",
+            type: "success"
+          })
         } else {
           this.$message({
             message: "无选中行",
