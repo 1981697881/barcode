@@ -68,6 +68,7 @@ export function listByRouteAdjustNo(data) {
   })
 }
 
+
 // 查询生产任务单
 export function planProductTask(data) {
   const url = '/planProductTask/list'
@@ -111,6 +112,19 @@ export function getProductWorkDispatchList(data, query) {
 // 投放
 export function addPlanProductTask(data) {
   const url = '/planProductTask/addList'
+  return request({
+    headers: {
+      'authorization': getToken('barrx'),
+      'Content-Type': 'application/json'
+    },
+    url: url,
+    method: 'post',
+    data: data
+  })
+}
+// 派工
+export function addProductWorkDispatch(data) {
+  const url = '/productWorkDispatch/add'
   return request({
     headers: {
       'authorization': getToken('barrx'),

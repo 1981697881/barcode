@@ -170,7 +170,7 @@
         }
       },
       alter() {
-        if (this.clickData.adjustNo) {
+        if (this.clickData.productWorkDetailId) {
           this.$emit('showDialog', this.clickData)
         } else {
           this.$message({
@@ -180,7 +180,6 @@
         }
       },
       query() {
-        console.log(this.qFilter())
         this.$emit('queryBtn', this.qFilter())
       },
       upload() {

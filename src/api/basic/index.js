@@ -118,4 +118,33 @@ export function getItemsList(data, query) {
     data: query
   })
 }
+//查询派单明细
+export function listByProductWorkDetailId(data) {
+  // 查询分页数据
+  const url = '/productWorkDispatch/listByProductWorkDetailId/' + data
+  return request({
+    headers: {
+      'authorization': getToken('barrx'),
+      'Content-Type': 'application/json'
+    },
+    url: url,
+    method: 'post',
+    //data: data
+  })
+}
+// 查询职员列表
+export function getEmpList(data) {
+  // 查询分页数据
+  const url = '/api/basic/empList'
+  return request({
+    headers: {
+      'authorization': getToken('barrx'),
+      'Content-Type': 'application/json'
+    },
+    url: url,
+    method: 'post',
+    data: {}
+  })
+}
+
 

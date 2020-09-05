@@ -129,7 +129,7 @@
 
   import { mapGetters } from "vuex";
   import { getRouteList } from "@/api/basic/index";
-  import { processAdjustAdd, processAdjustUpdate, listByRouteAdjustNo } from "@/api/process/index";
+  import { processAdjustAdd, processAdjustUpdate, listByProductWorkDetailId } from "@/api/process/index";
   import {
     getPer
   } from '@/utils/auth'
@@ -190,7 +190,7 @@
     mounted() {
       if(this.listInfo) {
         this.form1.createTime = this.listInfo.createTime
-        this.fetchData({adjustNo: this.listInfo.adjustNo})
+        this.fetchData({productWorkDetailId: this.listInfo.productWorkDetailId})
       }
     },
     methods: {
@@ -335,7 +335,7 @@
       fetchData(val) {
         const me = this
         me.loading = true
-        listByRouteAdjustNo(val).then(res => {
+        listByProductWorkDetailId(val).then(res => {
           if(res.success) {
             this.loading = false
             let data = res.data

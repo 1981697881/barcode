@@ -111,7 +111,7 @@ export const StaticRouterMap = [{
       },
     }]
   },
-  /*{
+  {
     path: '/system',
     component: Layout,
     name: 'System',
@@ -136,7 +136,7 @@ export const StaticRouterMap = [{
       },
     }
     ]
-  },*/
+  },
   /* {
     path: 'external-link',
     component: Layout,
