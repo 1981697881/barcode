@@ -44,7 +44,14 @@
           </el-col>
           <el-col :span="8">
             <el-form-item :label="'班组'" >
-              <el-input v-model="form1.processTeamName" disabled></el-input>
+              <el-select size="mini" v-model="form1.processTeamId" placeholder="请选择" >
+                <el-option
+                  v-for="(t,i) in psArray"
+                  :key="i"
+                  :label="t.FName"
+                  :value="t.FItemID">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -134,7 +141,7 @@
 <script>
 
   import { mapGetters } from "vuex";
-  import { getEmpList } from "@/api/basic/index";
+  import { getEmpList, teamList } from "@/api/basic/index";
   import { addProductWorkDispatch, listByRouteAdjustNo } from "@/api/process/index";
   import List from "@/components/List"
   export default {
@@ -163,6 +170,7 @@
           processTeamName: null,
           residueNum: null,
           workDate: null,
+          processTeamId: null,
           model: null,
           lotNo: null,
           projectName: null,
@@ -177,6 +185,7 @@
         ],
         checkObj: {},
         plArray: [],
+        psArray: [],
         result: [],
         rules: {
           workDate: [
@@ -295,6 +304,9 @@
       fetchFormat() {
         getEmpList().then(res => {
           this.plArray = res.data;
+        });
+        teamList().then(res => {
+          this.psArray = res.data;
         });
       },
       changeUserId(val, row) {
