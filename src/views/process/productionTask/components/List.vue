@@ -47,10 +47,10 @@ export default {
         { text: "工程名称", name: "FPrjName" },
         { text: "产品名称", name: "FPrdName" },
         { text: "规格型号", name: "FModel" },
-        { text: "BOM编号", name: "" },
+        { text: "BOM编号", name: "FBomNumber" },
         { text: "订单量", name: "FAuxQty" },
         { text: "计划量", name: "FPlanQty" },
-        { text: "本次投放量", name: "" },
+        { text: "本次投放量", name: "FPutNum" },
         { text: "实际生产量", name: "FActQty" },
         { text: "剩余量", name: "FRemainQty" },
         { text: "已投放量", name: "FPutNum" },
@@ -74,8 +74,8 @@ export default {
           this.$emit('uploadList')
       },
     dblclick(obj) {
-      console.log(obj)
-      this.$emit('showDialog', obj.row)
+    /*
+      this.$emit('showDialog', obj.row)*/
     },
     //监听单击某一行
     rowClick(obj) {

@@ -18,7 +18,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { journalList} from "@/api/system/permissions";
+import { journalList} from "@/api/system/index";
 import List from "@/components/List";
 
 export default {

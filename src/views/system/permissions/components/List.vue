@@ -27,7 +27,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { permissionsList,getRoleMenu} from "@/api/system/permissions";
+import { permissionsList,getRoleMenu} from "@/api/system/index";
 import List from "@/components/List";
 
 export default {

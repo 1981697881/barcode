@@ -23,7 +23,7 @@
 <script>
 import { Tree, TabsBar,List } from "./components";
 import { CustomerInfo } from "./form";
-import { addRoleMenu} from "@/api/system/permissions";
+import { addRoleMenu} from "@/api/system/index";
 export default {
   components: {
     Tree,

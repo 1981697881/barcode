@@ -14,7 +14,7 @@
       :width="'40%'"
       destroy-on-close
     >
-      <customer-info @hideDialog="hideWindow" @uploadList="upload" :uid="uid"></customer-info>
+      <customer-info @hideDialog="hideWindow" @uploadList="upload" :listInfo="listInfo"></customer-info>
     </el-dialog>
   </div>
 </template>
@@ -32,9 +32,7 @@ export default {
   data() {
     return {
       visible: null,
-        uid: null,
-      treeId: null, // null
-      floorId: null
+      listInfo: null,
     };
   },
     mounted() {
@@ -45,14 +43,19 @@ export default {
           this.visible = val
       },
     handlerDialog(obj){
-      if(obj)this.uid = obj.uid
+      console.log(obj)
+      this.listInfo = null
+      if(obj) {
+        const info = JSON.parse(JSON.stringify(obj))
+        this.listInfo = info
+      }
       this.visible = true
     },
     handlerNode(node) {
       this.$refs.list.fetchData(node.data.fid,node.data.type)
     },
     // 更新列表
-    upload(val = this.$refs.tabs.returnPar()) {
+    upload() {
       this.$refs.list.uploadPr(this.$refs.tabs.qFilter())
     },
     // 查询

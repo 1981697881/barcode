@@ -339,6 +339,7 @@
               obj.productWorkDetailId = this.form1.productWorkDetailId
               arrrar.push(obj)
             })
+            console.log(JSON.stringify(arrrar))
             //修改
             addProductWorkDispatch(arrrar).then(res => {
                 this.$emit('hideDialog')

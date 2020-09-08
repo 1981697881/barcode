@@ -222,7 +222,7 @@
         }
       },
       alter() {
-        if (this.clickData.adjustNo) {
+        if (this.clickData) {
           this.$emit('showDialog', this.clickData)
         } else {
           this.$message({

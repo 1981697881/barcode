@@ -24,6 +24,7 @@
         :prop="t.name"
         v-if="t.default!=undefined?t.default:true"
         :label="t.text"
+        :formatter="t.formatter!=undefined? (t.formatter == 'formatStatus'? formatStatus : null) : null"
         :width="t.width?t.width:(selfAdaption?'':'150px')"
         show-overflow-tooltip
         align="center"
@@ -102,6 +103,9 @@ export default {
     }
   },
   methods: {
+    formatStatus (row, column) {
+      return row.status == 0? '禁用' : row.status == 1 ? '正常' : '未知'
+    },
     tableRowClassName({row, rowIndex}) {
       if (row.totalPrice <= 0) {
         return 'urgent-row';

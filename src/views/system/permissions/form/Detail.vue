@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import {saveRoles,updateRoles,getRoles,getPermission} from "@/api/system/permissions";
+import {saveRoles,updateRoles,getRoles,getPermission} from "@/api/system/index";
 
 export default {
   props: {

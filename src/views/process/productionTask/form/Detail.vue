@@ -18,6 +18,7 @@
                   <el-input size="mini" v-if="t.name == 'FBatchNO'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input>
                   <el-input-number size="mini" v-if="t.name == 'FPlanQty'" placeholder="请输入内容" v-model="sel[t.name]">
+                  </el-input-number> <el-input-number size="mini" v-if="t.name == 'putNum'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input-number>
                   <div class="block">
                   <el-date-picker
@@ -194,10 +195,10 @@
           { text: "工程名称", name: "FPrjName" },
           { text: "产品名称", name: "FPrdName" },
           { text: "规格型号", name: "FModel" },
-          { text: "BOM编号", name: "" },
+          { text: "BOM编号", name: "FBomNumber" },
           { text: "订单量", name: "FAuxQty" },
           { text: "计划量", name: "FPlanQty" },
-          { text: "本次投放量", name: "" },
+          { text: "本次投放量", name: "putNum" },
           { text: "实际生产量", name: "FActQty" },
           { text: "剩余量", name: "FRemainQty" },
           { text: "已投放量", name: "FPutNum" },
@@ -272,7 +273,7 @@
         if (row.isSet) {
           //项目是模拟请求操作  自己修改下
           const sel = this.sel
-          if((sel.FBatchNO == null || sel.FBatchNO == '') || (sel.FPlanQty == null || sel.FPlanQty == '') || (sel.FPlanCommitDate == null || sel.FPlanCommitDate == '') || (sel.FPlanFinishDate == null || sel.FPlanFinishDate == '')){
+          if((sel.FBatchNO == null || sel.FBatchNO == '') || (sel.FPlanQty == null || sel.FPlanQty == '')|| (sel.putNum == null || sel.putNum == '') || (sel.FPlanCommitDate == null || sel.FPlanCommitDate == '') || (sel.FPlanFinishDate == null || sel.FPlanFinishDate == '')){
             return this.$message({
               type: 'error',
               message: "请输入必填项!"
@@ -337,20 +338,36 @@
           if (valid) {
             const list = this.list
             let array = []
+            let result = []
             list.forEach((item, index) =>{
               let obj = {}
               obj.saleOrderNo = item.FOrderNo
               obj.processCard = item.FCardNo
               obj.projectName = item.FPrjName
               obj.kingdeeNo = item.FKDNo
+              obj.bomNo = item.FBomNumber
               obj.orderNum = item.FAuxQty
-              obj.planNum = item.FAuxQty
               obj.itemId = item.FItemID
               obj.planProductNo = item.FICMONo
               obj.planProductNum = item.FActQty
+
+              obj.planNum = item.FAuxQty
+              obj.lotNo = item.FBatchNO
+              obj.putNum = item.putNum
+              obj.planDeliveryDate = item.FPlanFinishDate
+              obj.planStartDate = item.FPlanCommitDate
               obj.residueNum = item.FRemainQty
+              if((obj.planNum == null || obj.planNum == '') || (obj.lotNo == null || obj.lotNo == '') || (obj.putNum == null || obj.putNum == '') || (obj.planDeliveryDate == null || obj.planDeliveryDate == '') || (obj.planStartDate == null || obj.planStartDate == '')){
+                result.push(item.FItemID)
+              }
               array.push(obj)
             })
+            if(result.length > 0){
+              return this.$message({
+                type: 'error',
+                message: "请输入必填项!"
+              });
+            }
             addPlanProductTask(array).then(res => {
               this.$emit('uploadList')
               this.$emit('hideDialog')

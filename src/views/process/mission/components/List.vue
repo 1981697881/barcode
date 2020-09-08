@@ -35,7 +35,7 @@ export default {
       columns: [
         { text: "任务单号", name: "workNo" },
         { text: "生产班组", name: "processTeamName" },
-        { text: "开工日期", name: "" },
+        { text: "开工日期", name: "workDate" },
         { text: "卡号", name: "processCard" },
         { text: "金蝶号", name: "kingDeeNo" },
         { text: "生产批次号", name: "lotNo" },

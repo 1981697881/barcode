@@ -3,71 +3,69 @@
     <el-form :model="form1" :rules="rules" ref="form1" :label-width="'90px'" :size="'mini'">
       <el-row :gutter="20">
         <el-col :span="24">
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item :label="'任务单号'" >
-              <el-input v-model="form1.FModel" disabled></el-input>
+              <el-input v-model="form1.workNo" disabled></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item :label="'卡号'" >
-              <el-input v-model="form1.FModel" disabled></el-input>
+              <el-input v-model="form1.processCard" disabled></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+        </el-col>
+        <el-col :span="24">
+          <el-col :span="12">
             <el-form-item :label="'金蝶号'" >
-              <el-input v-model="form1.FModel" disabled></el-input>
+              <el-input v-model="form1.kingDeeNo" disabled></el-input>
             </el-form-item>
           </el-col>
-        </el-col>
-        <el-col :span="24">
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item :label="'生产批次号'" >
-              <el-input v-model="form1.FModel" disabled></el-input>
+              <el-input v-model="form1.lotNo" disabled></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+        </el-col>
+        <el-col :span="24">
+          <el-col :span="12">
             <el-form-item :label="'产品编码'" >
-              <el-input v-model="form1.FModel" disabled></el-input>
+              <el-input v-model="form1.productNumber" disabled></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item :label="'产品名称'" >
-              <el-input v-model="form1.FModel" disabled></el-input>
+              <el-input v-model="form1.productName" disabled></el-input>
             </el-form-item>
           </el-col>
         </el-col>
         <el-col :span="24">
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item :label="'规格型号'" >
-              <el-input v-model="form1.FModel" disabled></el-input>
+              <el-input v-model="form1.model" disabled></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item :label="'规格型号'" >
-              <el-input v-model="form1.FModel" disabled></el-input>
+          <el-col :span="12">
+            <el-form-item :label="'人员'" >
+              <el-input v-model="form1.residueNum" disabled></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item :label="'班组'" >
-              <el-input v-model="form1.FModel" disabled></el-input>
-            </el-form-item>
-          </el-col>
-
         </el-col>
         <el-col :span="24">
-          <el-col :span="8">
-            <el-form-item :label="'工序名称'" >
-              <el-input v-model="form1.FModel" disabled></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item :label="'计划量'" >
-              <el-input v-model="form1.FModel" disabled></el-input>
+              <el-input v-model="form1.productWorkPlanNum" disabled></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item :label="'派工数量'" >
-              <el-input v-model="form1.FModel" disabled></el-input>
+              <el-input v-model="form1.dispatchNum" disabled></el-input>
+            </el-form-item>
+          </el-col>
+        </el-col>
+        <el-col :span="24">
+          <el-col :span="12">
+            <el-form-item :label="'工序'" >
+              <el-input v-model="form1.processName" disabled></el-input>
             </el-form-item>
           </el-col>
         </el-col>
@@ -84,11 +82,10 @@
             >
               <template slot-scope="scope">
                 <span v-if="scope.row.isSet">
-                  <el-input size="mini" v-if="t.name == 'routeNo'" placeholder="请输入内容" v-model="sel[t.name]">
-                  </el-input>
-                  <el-input size="mini" v-if="t.name == 'name'" placeholder="请输入内容" v-model="sel[t.name]">
-                  </el-input>
-
+                  <el-input-number size="mini" v-if="t.name == 'dispatchNum'" placeholder="请输入内容" v-model="sel[t.name]">
+                  </el-input-number>
+                  <el-input-number size="mini" v-if="t.name == 'dispatchNum'" placeholder="请输入内容" v-model="sel[t.name]">
+                  </el-input-number>
                 </span>
                 <span v-else>{{scope.row[t.name]}}</span>
               </template>
@@ -122,11 +119,8 @@
 <script>
 
   import { mapGetters } from "vuex";
-  import { getRouteList } from "@/api/basic/index";
-  import { processAdjustAdd, processAdjustUpdate, listByRouteAdjustNo } from "@/api/process/index";
-  import {
-    getPer
-  } from '@/utils/auth'
+  import { getEmpList, teamList } from "@/api/basic/index";
+  import { addProductWorkReport} from "@/api/process/index";
   import List from "@/components/List"
   export default {
     components: {
@@ -145,47 +139,46 @@
       return {
         loading: false,
         sel: null, // 选中行
-        plArray: [],
-        pzArray: [],
-        psArray: [],
         form1: {
-          createTime: null,
-          itemId: null,
-          note: null,
-          userId: null,
-          FName: null,
-          FUnitName: null,
-          FModel: null,
-          FChartNumber: null,
+          processPlanNum: null,
+          productWorkPlanNum: null,
+          processName: null,
+          kingDeeNo: null,
+          productName: null,
+          productNumber: null,
+          processTeamName: null,
+          dispatchNum: null,
+          workDate: null,
+          processTeamId: null,
+          model: null,
+          lotNo: null,
+          projectName: null,
+          workNo: null,
         },
         visible: null,
         list: [],
         columns: [
-          { text: "指派人员", name: "routeNo" },
-          { text: "生产数量", name: "name" },
-          { text: "合计数量", name: "name" },
+          { text: "生产数量", name: "dispatchNum" },
+          { text: "合格数量", name: "dispatchNum" },
         ],
         checkObj: {},
-        pArray: [],
+        plArray: [],
+        psArray: [],
         result: [],
         rules: {
-          note: [
-            {required: true, message: '请输入值', trigger: 'blur'},
-          ],
-          createTime: [
+          workDate: [
             {required: true, message: '请选择时间', trigger: 'change'}
           ],
-          itemId: [
-            {required: true, message: '请选择物料', trigger: 'change'}
-          ],
-
         },
       }
     },
+    created() {
+
+    },
     mounted() {
+      console.log(this.listInfo)
       if(this.listInfo) {
-        this.form1.createTime = this.listInfo.createTime
-        this.fetchData({adjustNo: this.listInfo.adjustNo})
+        this.form1 = this.listInfo
       }
     },
     methods: {
@@ -229,7 +222,7 @@
           if (i.isSet) return this.$message.warning("请先保存当前编辑项");
         }
         this.cIndex += 10
-        let j = {isSet: true, orderNo: this.cIndex, processNumber: '', processName: '', processId: '', description: '', controlCodeId: '', controlCodeName: '', diploid: 1, price: '', processTeamNumber: '', processTeamId: '', processTeamName: ''};
+        let j = {isSet: true, orderNo: this.cIndex, userName: '', dispatchNum: ''};
         this.list.push(j);
         this.sel = JSON.parse(JSON.stringify(j));
       },
@@ -237,21 +230,21 @@
       pwdChange(row, index, cg) {
         //点击修改 判断是否已经保存所有操作
         for (let i of this.list) {
-          if (i.isSet && i.processRouteDetailId != row.processRouteDetailId) {
+          if (i.isSet && i.userId != row.userId) {
             this.$message.warning("请先保存当前编辑项");
             return false;
           }
         }
         //是否是取消操作
         if (!cg) {
-          if (!this.sel.processRouteDetailId) this.list.splice(index, 1);
+          if (!this.sel.userId) this.list.splice(index, 1);
           return row.isSet = !row.isSet;
         }
         console.log(row.isSet)
         //提交数据
         if (row.isSet) {
           const sel = this.sel
-          if((sel.adjPrice == null || sel.adjPrice === '') || (sel.effectiveDate == null || sel.effectiveDate === '') || (sel.expiryDate == null || sel.expiryDate === '')){
+          if((sel.userId == null || sel.userId === '') || (sel.userName == null || sel.userName === '') ){
             return this.$message({
               type: 'error',
               message: "请输入必填项!"
@@ -285,7 +278,20 @@
       },
 
       fetchFormat() {
-
+        getEmpList().then(res => {
+          this.plArray = res.data;
+        });
+        teamList().then(res => {
+          this.psArray = res.data;
+        });
+      },
+      changeUserId(val, row) {
+        const me = this
+        this.plArray.forEach((item, index) => {
+          if(item.FName == val) {
+            me.$set(row,'userId', item.FItemID);
+          }
+        })
       },
       setRow() {
         for (let i of this.list) {
@@ -301,27 +307,19 @@
             this.list.forEach((item, index) => {
               let obj = {}
               //obj.adjDate = item.
-              obj.adjPrice = item.adjPrice
-              obj.effectiveDate = item.effectiveDate
-              obj.expiryDate = item.expiryDate
-              obj.itemId = item.itemId
-              obj.routeDetailId = item.processRouteDetailId
+              obj.dispatchNum = item.dispatchNum
+              obj.userId = item.userId
+              obj.processId = this.form1.processId
+              obj.processTeamId = this.form1.processTeamId
+              obj.workDate = this.form1.workDate
+              obj.productWorkDetailId = this.form1.productWorkDetailId
               arrrar.push(obj)
             })
             //修改
-            console.log(JSON.stringify(arrrar))
-            if (typeof (this.form1.id) != undefined && this.form1.id != null) {
-              processAdjustUpdate(arrrar).then(res => {
-                this.$emit('hideDialog')
-                this.$emit('uploadList')
-              });
-              //保存
-            }else{
-              processAdjustAdd(arrrar).then(res => {
-                this.$emit('hideDialog')
-                this.$emit('uploadList')
-              });
-            }
+            addProductWorkReport(arrrar).then(res => {
+              this.$emit('hideDialog')
+              this.$emit('uploadList')
+            });
           }else {
             return false
           }

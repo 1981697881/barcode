@@ -7,11 +7,6 @@
             <el-input v-model="search.keyword"/>
           </el-form-item>
         </el-col>
-        <el-col :span="4">
-          <el-form-item :label="''">
-            <el-checkbox v-model="checked" @change="clickChange">显示禁用</el-checkbox>
-          </el-form-item>
-        </el-col>
         <el-col :span="2">
           <el-button :size="'mini'" type="primary" icon="el-icon-search" @click="query">查询</el-button>
         </el-col>
@@ -19,7 +14,7 @@
           <el-button :size="'mini'" type="primary" @click="handleAdd">新增</el-button>
           <el-button :size="'mini'" type="primary" @click="handleAlter">修改</el-button>
           <el-button :size="'mini'" type="primary" @click="upload">刷新</el-button>
-          <el-button :size="'mini'" type="primary"  @click="exportOrder">导出</el-button>
+        <!--  <el-button :size="'mini'" type="primary"  @click="exportOrder">导出</el-button>-->
          <!-- <el-button :size="'mini'" type="primary" >用户信息同步</el-button>-->
          <!-- <el-button :size="'mini'" type="primary">禁用</el-button>
           <el-button :size="'mini'" type="primary">启用</el-button>-->
@@ -31,14 +26,12 @@
 </template>
 
 <script>
-    // ---------------------------  新增客户没做完
-    import {resetPWD, exportUsersData} from "@/api/system/users";
+    import {resetPWD, exportUsersData} from "@/api/system/index";
     import {mapGetters} from "vuex";
 
     export default {
         data() {
             return {
-              checked: false,
               flag: true,
                 search: {
                   keyword: null
@@ -82,7 +75,7 @@
             this.$emit('queryBtn', { query: this.search.keyword, showIsDel: val})
           },
             handleAdd(node) {
-                this.$emit('showDialog', {uid: null})
+                this.$emit('showDialog')
             },
             reset() {
                 if (this.clickData.uid) {
@@ -102,7 +95,6 @@
         qFilter() {
           let obj = {}
           this.search.keyword != null || this.search.keyword != undefined ? obj.query = this.search.keyword : null
-          this.checked != null || this.checked != undefined ? obj.showIsDel = this.checked : null
           return obj
         },
           //关键字查询
@@ -111,7 +103,7 @@
           },
           upload() {
             this.search.keyword = ''
-            this.$emit('uploadList', {showIsDel: this.checked})
+            this.$emit('uploadList')
           },
           // 下载文件
           download(res) {
@@ -135,8 +127,8 @@
             return {showIsDel: this.checked, query: this.search.keyword}
           },
             handleAlter() {
-                if (this.clickData.uid) {
-                    this.$emit('showDialog', {uid: this.clickData.uid})
+                if (this.clickData) {
+                    this.$emit('showDialog', this.clickData)
                 } else {
                     this.$message({
                         message: "无选中行",

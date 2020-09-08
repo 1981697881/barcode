@@ -36,7 +36,7 @@
 </template>
 
 <script>
-    import {getSysMenuTree, getRoleMenu} from "@/api/system/permissions";
+    import {getSysMenuTree, getRoleMenu} from "@/api/system/index";
 
     export default {
         data() {

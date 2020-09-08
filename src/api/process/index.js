@@ -135,5 +135,70 @@ export function addProductWorkDispatch(data) {
     data: data
   })
 }
+//工序任务单修改
+export function updateProductWork(data) {
+  const url = '/productWork/update'
+  return request({
+    headers: {
+      'authorization': getToken('barrx'),
+      'Content-Type': 'application/json'
+    },
+    url: url,
+    method: 'post',
+    data: data
+  })
+}
+//工序派工单修改
+export function updateProductWorkDispatch(data) {
+  const url = '/productWorkDispatch/update'
+  return request({
+    headers: {
+      'authorization': getToken('barrx'),
+      'Content-Type': 'application/json'
+    },
+    url: url,
+    method: 'post',
+    data: data
+  })
+}
+//工序任务单查询明细
+export function getListByProductWorkId(data) {
+  const url = '/productWork/listByProductWorkId/' +data
+  return request({
+    headers: {
+      'authorization': getToken('barrx'),
+      'Content-Type': 'application/json'
+    },
+    url: url,
+    method: 'post',
+  })
+}
+//工序派工单查询明细
+export function listByProductWorkDetailId(data) {
+  const url = '/productWorkDispatch/listByProductWorkDetailId/' +data
+  return request({
+    headers: {
+      'authorization': getToken('barrx'),
+      'Content-Type': 'application/json'
+    },
+    url: url,
+    method: 'post',
+  })
+}
+//工序派工单汇报
+export function addProductWorkReport(data) {
+  const url = '/productWorkReport/add'
+  return request({
+    headers: {
+      'authorization': getToken('barrx'),
+      'Content-Type': 'application/json'
+    },
+    url: url,
+    method: 'post',
+    data: data
+  })
+}
+
+
 
 

@@ -3,63 +3,94 @@
     <el-form :model="form" :rules="rules" ref="form" label-width="100px" :size="'mini'">
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'uid'" style="display: none">
-            <el-input v-model="form.uid"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="'平台'" prop="plaIdS">
-            <el-select v-model="form.plaIdS" multiple placeholder="请选择">
-              <el-option
-                v-for="(t,i) in plaArray"
-                :key="i"
-                :label="t.platformName"
-                :value="t.plaId">
-              </el-option>
-            </el-select>
+          <el-form-item :label="'userId'" style="display: none">
+            <el-input v-model="form.userId"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item :label="'用户名称'" prop="name">
-            <el-input v-model="form.name"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
+        <el-col :span="16">
           <el-form-item :label="'用户账号'" prop="account">
-            <el-input v-model="form.account" :readonly="read"></el-input>
+            <el-input v-model="form.account" disabled></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item :label-width="'0px'" >
+            <el-button @click="setRow">选择</el-button>
           </el-form-item>
         </el-col>
       </el-row>
-     <!-- <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item :label="'联系号码'">
-            <el-input v-model="form.tel"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="'所属公司'">
-            <el-input v-model="form.comp"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>-->
-
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'用户权限'" prop="rid">
-            <el-select v-model="form.rid" class="width-full" placeholder="请选择用户权限">
-              <el-option :label="t.roleName" :value="t.rid" v-for="(t,i) in buildFormat" :key="i"></el-option>
+          <el-form-item :label="'类型'" prop="type">
+            <el-select v-model="form.type" class="width-full" placeholder="请选择类型">
+              <el-option :label="t.label" :value="t.value" v-for="(t,i) in options" :key="i"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item :label="'是否启用'">
-            <el-switch v-model="form.status"  active-value="0" inactive-value="1"></el-switch>
+          <el-form-item :label="'用户名称'" prop="username">
+            <el-input v-model="form.username" :readonly="read"></el-input>
           </el-form-item>
         </el-col>
+      </el-row><el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item :label="'密码'" prop="password">
+            <el-input type="password" v-model="form.password"></el-input>
+          </el-form-item>
+        </el-col>
+      <el-col :span="12">
+        <el-form-item :label="'是否启用'">
+          <el-switch v-model="form.status" active-value='1' inactive-value='0'></el-switch>
+        </el-form-item>
+      </el-col>
       </el-row>
     </el-form>
+    <el-dialog
+      :visible.sync="visible"
+      title="用户信息"
+      v-if="visible"
+      :width="'60%'"
+      destroy-on-close
+      append-to-body
+    >
+      <el-form :model="form2" ref="form2" label-width="80px" :size="'mini'">
+        <el-row :gutter="20">
+          <el-col :span="10">
+            <el-form-item :label="'账号'">
+              <el-input v-model="form2.account" ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10">
+            <el-form-item :label="'职员'">
+              <el-input v-model="form2.empName" ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-button  :size="'mini'" type="success" @click="query" icon="el-icon-search">查询</el-button>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="24" >
+            <list
+              class="list-main"
+              height="300px"
+              :columns="columns"
+              :loading="loading"
+              :list="list"
+              index
+              @row-click="rowClick"
+              @dblclick="dblclick"
+              @handle-size="handleSize"
+              @handle-current="handleCurrent"
+            />
+          </el-col>
+        </el-row>
+      </el-form>
+      <div slot="footer" style="text-align:center;">
+        <el-button type="primary" @click="confirm">确认</el-button>
+      </div>
+    </el-dialog>
     <div slot="footer" style="text-align:center">
       <el-button type="primary" @click="saveData('form')">保存</el-button>
     </div>
@@ -67,103 +98,165 @@
 </template>
 
 <script>
-    import {getRoles, saveUsers, getUsers, updateUsers, getPlas} from "@/api/system/users";
+  import List from "@/components/List"
+    import { sysUserSave, sysUserUpdate, getK3User} from "@/api/system/index";
     export default {
+      components: {
+        List
+      },
         props: {
-            uid: {
-                type: Number,
-                default: null
-            }
+          listInfo: {
+            type: Object,
+            default: null
+          },
         },
         data() {
             return {
+              loading: false,
+              visible: null,
+              form2: {
+                account: null,
+                empName: null
+              },
+              list: {},
+              columns: [
+                { text: "登录账号", name: "FAccount" },
+                { text: "职员编码", name: "FEmpNumber" },
+                { text: "职员名称", name: "FEmpName" },
+              ],
+              options: [{
+                value: 1,
+                label: '后台管理员'
+              }, {
+                value: 2,
+                label: 'PDA操作员'
+              }, {
+                value: 3,
+                label: '后台操作员'
+              }],
                 form: {
-                    comp:null,
-                    tel:null,
-                    uid: null,
+                    userId: null,
                     account: null, // 账号
-                    rid: null,
-                    name: null,// 名称
-                    plaIdS: [],
-                    status: '0',
+                    username: null,// 名称
+                    status: '1',
+                    password: null,
+                    type: null,
                 },
               read: null,
+              checkObj: {},
                 rules: {
                     account: [
-                        {required: true, message: '请输入名稱', trigger: 'blur'},
-                    ],
-                    name: [
                         {required: true, message: '请输入账号', trigger: 'blur'},
                     ],
-                    rid: [
-                        {required: true, message: '请选择角色', trigger: 'change'},
+                    username: [
+                        {required: true, message: '请输入名稱', trigger: 'blur'},
+                    ], password: [
+                        {required: true, message: '请输入密码', trigger: 'blur'},
+                    ],type: [
+                        {required: true, message: '请选择类型', trigger: 'change'},
                     ],
-                    plaIdS: [
-                        {required: true, message: '请选择平台', trigger: 'change'},
-                    ],
-
                 },
-                buildFormat: [],
-                plaArray: [],
             };
         },
         created() {
 
         },
         mounted() {
-
-            this.form.uid = this.uid
-            this.fetchFormat();
-            if (this.form.uid) {
-                this.read = true
-                this.fetchData(this.form.uid);
-            }
+          if(this.listInfo) {
+            this.form = this.listInfo
+            this.form.status = this.listInfo.status + ''
+          }
         },
         methods: {
+          confirm() {
+            if (this.checkObj.FUserID) {
+              this.form.account = obj.row.FAccount
+              this.form.userId = obj.row.FUserID
+              this.visible = false
+            } else {
+              this.$message({
+                message: "无选中数据",
+                type: "warning"
+              })
+            }
+          },
+          fetchList(val, data = {
+            pageNum: this.list.pageNum || 1,
+            pageSize: this.list.pageSize || 50
+          }) {
+            let obj = Object.assign(data,val)
+            this.loading = true;
+            getK3User(obj).then(res => {
+              this.loading = false;
+              this.list = {list: res.data};
+            });
+          },
+          dblclick(obj, index) {
+            if (obj.row.FUserID) {
+              this.form.account = obj.row.FAccount
+              this.form.userId = obj.row.FUserID
+              this.visible = false
+            } else {
+              this.$message({
+                message: "无选中数据",
+                type: "warning"
+              })
+            }
+            //this.pwdChange(scope.row,scope.$index,true)
+          },
+          //监听单击某一行
+          rowClick(obj) {
+            this.checkObj = obj.row
+          },
+          // 查询条件过滤
+          qFilter() {
+            let obj = {}
+            this.form2.account != null && this.form2.account != '' ? obj.account = this.form2.account : null
+            this.form2.empName != null && this.form2.empName != '' ? obj.empName = this.form2.empName : null
+            return obj
+          },
+          setRow() {
+            this.visible = true
+          },
+          query() {
+            this.list.current = 1;
+            this.fetchList(this.qFilter());
+          },
+          //监听每页显示几条
+          handleSize(val) {
+            this.list.pageSize = val
+            this.fetchList({});
+          },
+          //监听当前页
+          handleCurrent(val) {
+            this.list.pageNum = val;
+            this.fetchList({});
+          },
             saveData(form) {
                 this.$refs[form].validate((valid) => {
                     //判断必填项
                     if (valid) {
-                        console.log(this.uid)
-                        if (typeof (this.uid) != undefined && this.uid != null) {
-                            updateUsers(this.form).then(res => {
-                                if(res.flag){
+                        if (typeof (this.form.id) != undefined && this.form.id != null) {
+                          sysUserUpdate(this.form).then(res => {
+                                if(res.success){
                                     this.$emit('hideDialog', false)
                                     this.$emit('uploadList')
                                 }
                             });
                         } else {
-                            saveUsers(this.form).then(res => {
-                                if(res.flag){
+                          sysUserSave(this.form).then(res => {
+                                if(res.success){
                                     this.$emit('hideDialog', false)
                                     this.$emit('uploadList')
                                 }
                             });
                         }
-
-
                     } else {
                         return false;
                     }
                 })
 
             },
-            fetchFormat() {
-                getRoles().then(res => {
-                    console.log(res)
-                    this.buildFormat = res.data;
-                });
-                getPlas().then(res => {
-                    console.log(res)
-                    this.plaArray = res.data;
-                });
-            },
-            fetchData(val) {
-                getUsers(val).then(res => {
-                    this.form = res.data;
-                    this.form.status = (res.data.status=="正常状态"?"0":"1");
-                });
-            }
         }
     };
 </script>
