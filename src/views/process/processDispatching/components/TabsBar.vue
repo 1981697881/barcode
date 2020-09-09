@@ -222,7 +222,7 @@
         }
       },
       alter() {
-        if (this.clickData) {
+        if (this.clickData.productWorkDetailId) {
           this.$emit('showDialog', this.clickData)
         } else {
           this.$message({

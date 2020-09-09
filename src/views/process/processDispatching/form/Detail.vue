@@ -266,7 +266,7 @@
         //提交数据
         if (row.isSet) {
           const sel = this.sel
-          if((sel.userId == null || sel.userId === '') || (sel.userName == null || sel.userName === '') ){
+          if((sel.userId == null || sel.userId === '') || (sel.dispatchNum == null || sel.dispatchNum === '') ){
             return this.$message({
               type: 'error',
               message: "请输入必填项!"
@@ -324,6 +324,7 @@
           //判断必填项
           if (valid) {
             let arrrar = []
+            let result = []
             this.list.forEach((item, index) => {
               let obj = {}
               //obj.adjDate = item.
@@ -334,8 +335,17 @@
               obj.processTeamId = this.form1.processTeamId
               obj.workDate = this.form1.workDate
               obj.productWorkDetailId = item.productWorkDetailId
+              if((obj.dispatchNum == null || obj.dispatchNum == '') || (obj.userId == null || obj.userId == '')){
+                result.push(this.form1.productWorkDetailId)
+              }
               arrrar.push(obj)
             })
+            if(result.length > 0 || arrrar.length <= 0){
+              return this.$message({
+                type: 'error',
+                message: "请输入必填项!"
+              });
+            }
             //修改
             updateProductWorkDispatch(arrrar).then(res => {
               this.$emit('hideDialog')

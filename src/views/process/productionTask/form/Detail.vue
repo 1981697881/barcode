@@ -362,7 +362,7 @@
               }
               array.push(obj)
             })
-            if(result.length > 0){
+            if(result.length > 0 || array.length <= 0){
               return this.$message({
                 type: 'error',
                 message: "请输入必填项!"

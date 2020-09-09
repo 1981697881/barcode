@@ -216,7 +216,7 @@
           if (i.isSet) return this.$message.warning("请先保存当前编辑项");
         }
         this.cIndex += 10
-        let j = {isSet: true, orderNo: this.cIndex, userName: '', dispatchNum: ''};
+        let j = {isSet: true, orderNo: this.cIndex, orderNo: '', planNum: ''};
         this.list.push(j);
         this.sel = JSON.parse(JSON.stringify(j));
       },
@@ -238,7 +238,7 @@
         //提交数据
         if (row.isSet) {
           const sel = this.sel
-          if((sel.processId == null || sel.processId === '')){
+          if((sel.processId == null || sel.processId === '') || (sel.orderNo == null || sel.orderNo === '') || (sel.planNum == null || sel.planNum === '')){
             return this.$message({
               type: 'error',
               message: "请输入必填项!"
@@ -295,6 +295,7 @@
           //判断必填项
           if (valid) {
             let arrrar = []
+            let result = []
             this.list.forEach((item, index) => {
               let obj = {}
               obj.orderNo = item.orderNo
@@ -306,9 +307,17 @@
               obj.productWorkDetailId = item.productWorkDetailId
               obj.workNo = item.workNo
               obj.processPlanNum = item.planNum
+              if((obj.processId == null || obj.processId === '') || (obj.orderNo == null || obj.orderNo === '') || (obj.planNum == null || obj.planNum === '')){
+                result.push(item.productWorkDetailId)
+              }
               arrrar.push(obj)
             })
-            console.log(JSON.stringify(arrrar))
+            if(result.length > 0 || arrrar.length <= 0){
+              return this.$message({
+                type: 'error',
+                message: "请输入必填项!"
+              });
+            }
             //修改
             updateProductWork(arrrar).then(res => {
               this.$emit('hideDialog')

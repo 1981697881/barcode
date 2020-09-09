@@ -548,6 +548,7 @@
         this.$refs["form1"].validate((valid) => {
           //判断必填项
           if (valid) {
+            let result = []
             this.list.forEach((item, index) => {
               item.id = item.processRouteDetailId
              delete item.ProcessNumber
@@ -555,11 +556,19 @@
              delete item.ProcessTeamNumber
              delete item.isSet
              delete item.processRouteId
+              if((item.orderNo == null || item.orderNo == '') || (item.processName == null || item.processName == '') || (item.controlCodeName == null || item.controlCodeName == '') || (item.diploid == null || item.diploid == '') || (item.processTeamName == null || item.processTeamName == '')){
+                result.push(item.id)
+              }
             })
+            if(result.length > 0 || this.form1.detailList.length <= 0){
+              return this.$message({
+                type: 'error',
+                message: "请输入必填项!"
+              });
+            }
             //修改
             delete this.form1.createTime
             this.form1.detailList = this.list
-            console.log(JSON.stringify(this.form1))
             if (typeof (this.form1.id) != undefined && this.form1.id != null) {
               processRouteUpdate(this.form1).then(res => {
                 this.$emit('hideDialog')

@@ -46,14 +46,14 @@
           </el-col>
           <el-col :span="12">
             <el-form-item :label="'人员'" >
-              <el-input v-model="form1.residueNum" disabled></el-input>
+              <el-input v-model="form1.dispatchName" disabled></el-input>
             </el-form-item>
           </el-col>
         </el-col>
         <el-col :span="24">
           <el-col :span="12">
             <el-form-item :label="'计划量'" >
-              <el-input v-model="form1.productWorkPlanNum" disabled></el-input>
+              <el-input v-model="form1.planNum" disabled></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -82,9 +82,9 @@
             >
               <template slot-scope="scope">
                 <span v-if="scope.row.isSet">
-                  <el-input-number size="mini" v-if="t.name == 'dispatchNum'" placeholder="请输入内容" v-model="sel[t.name]">
+                  <el-input-number size="mini" v-if="t.name == 'productNum'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input-number>
-                  <el-input-number size="mini" v-if="t.name == 'dispatchNum'" placeholder="请输入内容" v-model="sel[t.name]">
+                  <el-input-number size="mini" v-if="t.name == 'qualifiedNum'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input-number>
                 </span>
                 <span v-else>{{scope.row[t.name]}}</span>
@@ -158,8 +158,8 @@
         visible: null,
         list: [],
         columns: [
-          { text: "生产数量", name: "dispatchNum" },
-          { text: "合格数量", name: "dispatchNum" },
+          { text: "生产数量", name: "productNum" },
+          { text: "合格数量", name: "qualifiedNum" },
         ],
         checkObj: {},
         plArray: [],
@@ -222,7 +222,7 @@
           if (i.isSet) return this.$message.warning("请先保存当前编辑项");
         }
         this.cIndex += 10
-        let j = {isSet: true, orderNo: this.cIndex, userName: '', dispatchNum: ''};
+        let j = {isSet: true, userId: this.form1.dispatchUserId, orderNo: this.cIndex, userName: '', dispatchNum: ''};
         this.list.push(j);
         this.sel = JSON.parse(JSON.stringify(j));
       },
@@ -244,7 +244,7 @@
         //提交数据
         if (row.isSet) {
           const sel = this.sel
-          if((sel.userId == null || sel.userId === '') || (sel.userName == null || sel.userName === '') ){
+          if((sel.productNum == null || sel.productNum === '') || (sel.qualifiedNum == null || sel.qualifiedNum === '') ){
             return this.$message({
               type: 'error',
               message: "请输入必填项!"
@@ -304,17 +304,25 @@
           //判断必填项
           if (valid) {
             let arrrar = []
+            let result = []
             this.list.forEach((item, index) => {
               let obj = {}
               //obj.adjDate = item.
-              obj.dispatchNum = item.dispatchNum
-              obj.userId = item.userId
-              obj.processId = this.form1.processId
-              obj.processTeamId = this.form1.processTeamId
-              obj.workDate = this.form1.workDate
+              obj.productNum = item.productNum
+              obj.qualifiedNum = item.qualifiedNum
+              obj.userId = this.form1.dispatchUserId
               obj.productWorkDetailId = this.form1.productWorkDetailId
+              if((obj.productNum == null || obj.productNum == '') || (obj.qualifiedNum == null || obj.qualifiedNum == '')){
+                result.push(this.form1.productWorkDetailId)
+              }
               arrrar.push(obj)
             })
+            if(result.length > 0 || arrrar.length <= 0){
+              return this.$message({
+                type: 'error',
+                message: "请输入必填项!"
+              });
+            }
             //修改
             addProductWorkReport(arrrar).then(res => {
               this.$emit('hideDialog')
@@ -324,22 +332,6 @@
             return false
           }
         })
-      },
-      fetchData(val) {
-        const me = this
-        me.loading = true
-        listByRouteAdjustNo(val).then(res => {
-          if(res.success) {
-            this.loading = false
-            let data = res.data
-            data.forEach((item, index) => {
-              this.result.push(item.routeDetailId)
-              item.processRouteDetailId = item.routeDetailId
-            })
-            this.list = data
-
-          }
-        });
       },
     }
   };

@@ -468,6 +468,7 @@
           //判断必填项
           if (valid) {
             let arrrar = []
+            let result = []
             this.list.forEach((item, index) => {
               let obj = {}
               //obj.adjDate = item.
@@ -476,10 +477,17 @@
               obj.expiryDate = item.expiryDate
               obj.itemId = item.itemId
               obj.routeDetailId = item.processRouteDetailId
+              if((obj.adjPrice == null || obj.adjPrice === '') || (obj.effectiveDate == null || obj.effectiveDate === '') || (obj.expiryDate == null || obj.expiryDate === '')){
+                result.push(item.productWorkDetailId)
+              }
               arrrar.push(obj)
             })
-            //修改
-            console.log(JSON.stringify(arrrar))
+            if(result.length > 0 || arrrar.length <= 0){
+              return this.$message({
+                type: 'error',
+                message: "请输入必填项!"
+              });
+            }
             if (typeof (this.form1.id) != undefined && this.form1.id != null) {
               processAdjustUpdate(arrrar).then(res => {
                 this.$emit('hideDialog')
