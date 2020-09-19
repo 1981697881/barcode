@@ -40,10 +40,11 @@ export default {
       columns: [
           { text: "生产计划单号", name: "FICMONo" },
         { text: "销售订单号", name: "FOrderNo" },
+        { text: "订单分录号", name: "FEntryID" },
         { text: "流程卡号", name: "FCardNo" },
         { text: "金蝶号", name: "FKDNo" },
         { text: "生产批次号", name: "FBatchNO" },
-        { text: "产品编码", name: "" },
+        { text: "产品编码", name: "FPrdNumber" },
         { text: "工程名称", name: "FPrjName" },
         { text: "产品名称", name: "FPrdName" },
         { text: "规格型号", name: "FModel" },

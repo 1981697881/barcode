@@ -560,15 +560,15 @@
                 result.push(item.id)
               }
             })
+            //修改
+            delete this.form1.createTime
+            this.form1.detailList = this.list
             if(result.length > 0 || this.form1.detailList.length <= 0){
               return this.$message({
                 type: 'error',
                 message: "请输入必填项!"
               });
             }
-            //修改
-            delete this.form1.createTime
-            this.form1.detailList = this.list
             if (typeof (this.form1.id) != undefined && this.form1.id != null) {
               processRouteUpdate(this.form1).then(res => {
                 this.$emit('hideDialog')

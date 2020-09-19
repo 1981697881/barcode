@@ -188,6 +188,7 @@
         columns: [
           { text: "生产计划单号", name: "FICMONo" },
           { text: "销售订单号", name: "FOrderNo" },
+          { text: "订单分录号", name: "FEntryID" },
           { text: "流程卡号", name: "FCardNo" },
           { text: "金蝶号", name: "FKDNo" },
           { text: "生产批次号", name: "FBatchNO" },
@@ -259,7 +260,7 @@
       pwdChange(row, index, cg) {
         //点击修改 判断是否已经保存所有操作
         for (let i of this.list) {
-          if (i.isSet && i.FOrderNo != row.FOrderNo) {
+          if (i.isSet && (i.FOrderNo != row.FOrderNo || i.RowNumber != row.RowNumber)) {
             this.$message.warning("请先保存当前编辑项");
             return false;
           }
@@ -273,7 +274,7 @@
         if (row.isSet) {
           //项目是模拟请求操作  自己修改下
           const sel = this.sel
-          if((sel.FBatchNO == null || sel.FBatchNO == '') || (sel.FPlanQty == null || sel.FPlanQty == '')|| (sel.putNum == null || sel.putNum == '') || (sel.FPlanCommitDate == null || sel.FPlanCommitDate == '') || (sel.FPlanFinishDate == null || sel.FPlanFinishDate == '')){
+          if((sel.FBatchNO == null || sel.FOrderNo == '') || (sel.FPlanQty == null || sel.FPlanQty == '')|| (sel.putNum == null || sel.putNum == '') || (sel.FPlanCommitDate == null || sel.FPlanCommitDate == '') || (sel.FPlanFinishDate == null || sel.FPlanFinishDate == '')){
             return this.$message({
               type: 'error',
               message: "请输入必填项!"
@@ -348,6 +349,7 @@
               obj.bomNo = item.FBomNumber
               obj.orderNum = item.FAuxQty
               obj.itemId = item.FItemID
+              obj.entryId = item.FEntryID
               obj.planProductNo = item.FICMONo
               obj.planProductNum = item.FActQty
 
