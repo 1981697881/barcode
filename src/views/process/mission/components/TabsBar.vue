@@ -196,11 +196,12 @@
       // 查询条件过滤
       qFilter() {
         let obj = {}
-        this.search.workNo != null && this.search.workNo != '' ? obj.workNo = this.search.workNo : null
-        this.search.kingDeeNo != null && this.search.kingDeeNo != '' ? obj.routeNo = this.search.kingDeeNo : null
-        this.search.productName != null && this.search.productName != '' ? obj.productName = this.search.productName : null
-        this.search.productNumber != null && this.search.productNumber != '' ? obj.productNumber = this.search.productNumber : null
-        this.search.processId != null && this.search.processId != '' ? obj.processId = this.search.processId : null
+        this.value != null && this.value != undefined ? obj.endDate = this.value[1] : null
+        this.value != null && this.value != undefined ? obj.startDate = this.value[0] : null
+        this.search.cardNo != null && this.search.cardNo != undefined ? obj.cardNo = this.search.cardNo : null
+        this.search.kingDeeNo != null && this.search.kingDeeNo != undefined ? obj.kingDeeNo = this.search.kingDeeNo : null
+        this.search.productName != null && this.search.productName != undefined ? obj.startDate = this.search.productName : null
+        this.search.productNumber != null && this.search.productNumber != undefined ? obj.startDate = this.search.productNumber : null
         return obj
       },
       handleAdd(){

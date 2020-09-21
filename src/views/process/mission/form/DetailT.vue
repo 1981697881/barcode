@@ -86,7 +86,7 @@
           </el-col>
         </el-col>
         <el-col :span="24">
-          <el-table el-table style="height: 300px" :data="list" border size="mini" :highlight-current-row="true">
+          <el-table el-table :height="'calc(100vh/2)'" :data="list" border size="mini" :highlight-current-row="true">
             <el-table-column
               v-for="(t,i) in columns"
               :key="i"

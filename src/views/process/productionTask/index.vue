@@ -9,9 +9,10 @@
     </div>
     <el-dialog
       :visible.sync="visible"
+      :fullscreen="true"
       title="基本信息"
       v-if="visible"
-      :width="'70%'"
+      :width="'100%'"
       destroy-on-close
     >
       <info @hideDialog="hideWindow" @uploadList="upload" :listInfo="listInfo"></info>

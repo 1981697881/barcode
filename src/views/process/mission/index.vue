@@ -11,8 +11,9 @@
     <el-dialog
       :visible.sync="visible"
       title="基本信息"
+      :fullscreen="true"
       v-if="visible"
-      :width="'70%'"
+      :width="'100%'"
       destroy-on-close
     >
       <info @hideDialog="hideWindow" @uploadList="upload" :listInfo="listInfo"></info>
@@ -20,8 +21,9 @@
     <el-dialog
       :visible.sync="visible2"
       title="派工信息"
+      :fullscreen="true"
       v-if="visible2"
-      :width="'80%%'"
+      :width="'100%'"
       destroy-on-close
     >
       <info-t @hideDialog="hideWindowT" @uploadList="upload" :listInfo="listInfo2"></info-t>

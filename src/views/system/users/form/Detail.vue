@@ -45,6 +45,19 @@
         </el-form-item>
       </el-col>
       </el-row>
+      <el-row  style="height: 250px;overflow: auto;border: 1px solid #EBEEF5;">
+          <el-tree
+            ref="tree1"
+            :props="defaultProps"
+            :default-expand-all="false"
+            :data="data"
+            show-checkbox
+            :default-checked-keys="Checkeds"
+            node-key="menuId"
+            highlight-current
+            :expand-on-click-node="false"
+          />
+      </el-row>
     </el-form>
     <el-dialog
       :visible.sync="visible"
@@ -70,22 +83,7 @@
             <el-button  :size="'mini'" type="success" @click="query" icon="el-icon-search">查询</el-button>
           </el-col>
         </el-row>
-        <el-row :gutter="20">
-          <el-col :span="24" >
-            <list
-              class="list-main"
-              height="300px"
-              :columns="columns"
-              :loading="loading"
-              :list="list"
-              index
-              @row-click="rowClick"
-              @dblclick="dblclick"
-              @handle-size="handleSize"
-              @handle-current="handleCurrent"
-            />
-          </el-col>
-        </el-row>
+
       </el-form>
       <div slot="footer" style="text-align:center;">
         <el-button type="primary" @click="confirm">确认</el-button>
@@ -99,7 +97,7 @@
 
 <script>
   import List from "@/components/List"
-    import { sysUserSave, sysUserUpdate, getK3User} from "@/api/system/index";
+    import { getSysMenuByUserId, sysUserUpdate, sysUserSave, getK3User} from "@/api/system/index";
     export default {
       components: {
         List
@@ -112,6 +110,105 @@
         },
         data() {
             return {
+              data: [{
+              "menuId":1,
+              "text":"基础资料",
+              "prId":-1,
+              "type":null,
+              "sort":null,
+              "leaf":null,
+              "checked":null,
+              "children":[
+                {
+                  "menuId":2,
+                  "text":"组织架构",
+                  "prId":1,
+                  "type":null,
+                  "sort":null,
+                  "leaf":null,
+                  "checked":null,
+                  "children":null
+                },
+                {
+                  "menuId":3,
+                  "text":"物料管理",
+                  "prId":1,
+                  "type":null,
+                  "sort":null,
+                  "leaf":null,
+                  "checked":null,
+                  "children":null
+                },
+                {
+                  "menuId":4,
+                  "text":"职员管理",
+                  "prId":1,
+                  "type":null,
+                  "sort":null,
+                  "leaf":null,
+                  "checked":null,
+                  "children":null
+                },
+                {
+                  "menuId":5,
+                  "text":"物流商管理",
+                  "prId":1,
+                  "type":null,
+                  "sort":null,
+                  "leaf":null,
+                  "checked":null,
+                  "children":null
+                },
+                {
+                  "menuId":7,
+                  "text":"生产资源管理",
+                  "prId":1,
+                  "type":null,
+                  "sort":null,
+                  "leaf":null,
+                  "checked":null,
+                  "children":null
+                },
+                {
+                  "menuId":40,
+                  "text":"规则设置",
+                  "prId":1,
+                  "type":null,
+                  "sort":null,
+                  "leaf":null,
+                  "checked":null,
+                  "children":null
+                },
+                {
+                  "menuId":41,
+                  "text":"库位管理",
+                  "prId":1,
+                  "type":null,
+                  "sort":null,
+                  "leaf":null,
+                  "checked":null,
+                  "children":null
+                },
+                {
+                  "menuId":77,
+                  "text":"报表规则",
+                  "prId":1,
+                  "type":null,
+                  "sort":null,
+                  "leaf":null,
+                  "checked":null,
+                  "children":null
+                }
+              ]
+            },
+          ],
+              defaultProps: {
+                children: "children",
+                label: "text",
+                isLeaf: "leaf",
+                id: "menuId"
+              },
+              Checkeds: [],
               loading: false,
               visible: null,
               form2: {
@@ -165,9 +262,15 @@
           if(this.listInfo) {
             this.form = this.listInfo
             this.form.status = this.listInfo.status + ''
+            this.fetchMenu(this.listInfo.id)
           }
         },
         methods: {
+          fetchMenu(val) {
+            getSysMenuByUserId({id: val}).then(res => {
+              this.data = res.data.treeVoList
+            });
+          },
           confirm() {
             if (this.checkObj.FUserID) {
               this.form.account = obj.row.FAccount

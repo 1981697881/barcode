@@ -3,7 +3,7 @@
     <el-form :model="form" :rules="rules" ref="form" :label-width="'120px'" :size="'mini'">
       <el-row :gutter="20">
         <el-col :span="24">
-          <el-table el-table :height="'calc(100vh/2)'"  :data="list" border size="mini" :highlight-current-row="true">
+          <el-table el-table :height="'calc(100vh/1.3)'"  :data="list" border size="mini" :highlight-current-row="true">
             <el-table-column
               v-for="(t,i) in columns"
               :key="i"

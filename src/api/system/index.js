@@ -14,6 +14,18 @@ export function getSysUserAll(val) {
     method: 'get',
     params: val
   })
+}// 查询用户权限
+export function getSysMenuByUserId(val) {
+  // 查询分页数据
+  const url = '/sysMenu/getSysMenuByUserId'
+  return request({
+    headers: {
+      'authorization': getToken('barrx')
+    },
+    url: url,
+    method: 'get',
+    params: val
+  })
 }
 // 获取用户
 export function getK3User(val) {

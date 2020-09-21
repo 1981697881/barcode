@@ -48,6 +48,8 @@
             <el-button style="margin-left: 10px;display: none" size="mini" type="success" @click="submitUpload">上传到服务器</el-button>
           </el-upload>
          <!-- <el-button :size="'mini'" type="primary" icon="el-icon-delete" @click="Delivery">删除</el-button>-->
+          <el-button :size="'mini'" type="primary" icon="el-icon-sort-up" @click="audit">审核</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-sort-down" @click="unAudit">反审核</el-button>
           <el-button :size="'mini'" type="primary" icon="el-icon-refresh" @click="upload">刷新</el-button>
         </el-button-group>
       </el-row>
@@ -131,6 +133,26 @@
         }
       },
       alter() {
+        if (this.clickData.processRouteId) {
+          this.$emit('showDialog', this.clickData)
+        } else {
+          this.$message({
+            message: "无选中行",
+            type: "warning"
+          })
+        }
+      },
+      audit() {
+        if (this.clickData.processRouteId) {
+          this.$emit('showDialog', this.clickData)
+        } else {
+          this.$message({
+            message: "无选中行",
+            type: "warning"
+          })
+        }
+      },
+      unAudit() {
         if (this.clickData.processRouteId) {
           this.$emit('showDialog', this.clickData)
         } else {

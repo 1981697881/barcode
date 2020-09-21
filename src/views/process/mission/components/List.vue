@@ -87,6 +87,8 @@ export default {
       pageSize: this.list.pageSize || 50
     }) {
       this.loading = true;
+      console.log(data)
+      console.log(val)
       getProductWorkList(data, val).then(res => {
         this.loading = false;
         this.list = res.data;

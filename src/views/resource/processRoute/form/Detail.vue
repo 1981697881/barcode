@@ -551,11 +551,11 @@
             let result = []
             this.list.forEach((item, index) => {
               item.id = item.processRouteDetailId
-             delete item.ProcessNumber
-             delete item.processRouteDetailId
-             delete item.ProcessTeamNumber
-             delete item.isSet
-             delete item.processRouteId
+              delete item.ProcessNumber
+              delete item.processRouteDetailId
+              delete item.ProcessTeamNumber
+              delete item.isSet
+              delete item.processRouteId
               if((item.orderNo == null || item.orderNo == '') || (item.processName == null || item.processName == '') || (item.controlCodeName == null || item.controlCodeName == '') || (item.diploid == null || item.diploid == '') || (item.processTeamName == null || item.processTeamName == '')){
                 result.push(item.id)
               }
