@@ -15,16 +15,15 @@ export function getSysUserAll(val) {
     params: val
   })
 }// 查询用户权限
-export function getSysMenuByUserId(val) {
+export function getProcessMenuByUserId(val) {
   // 查询分页数据
-  const url = '/sysMenu/getSysMenuByUserId'
+  const url = '/processMenu/getProcessMenuByUserId/'+ val
   return request({
     headers: {
       'authorization': getToken('barrx')
     },
     url: url,
     method: 'get',
-    params: val
   })
 }
 // 获取用户
@@ -61,6 +60,17 @@ export function sysUserUpdate(data) {
     headers: {
       'authorization': getToken('barrx'),
       'Content-Type': 'application/json'
+    },
+    url: url,
+    method: 'post',
+    data: data
+  })
+}//保存用户权限
+export function processMenuAdd(data) {
+  const url = '/processMenu/add'
+  return request({
+    headers: {
+      'authorization': getToken('barrx'),
     },
     url: url,
     method: 'post',

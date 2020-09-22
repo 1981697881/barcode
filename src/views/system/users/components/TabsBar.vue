@@ -26,9 +26,9 @@
 </template>
 
 <script>
-    import {resetPWD, exportUsersData} from "@/api/system/index";
+    import {resetPWD, exportUsersData} from "@/api/system/index"
+    import {getProcessMenuByParent} from "@/api/wy/menu"
     import {mapGetters} from "vuex";
-
     export default {
         data() {
             return {
@@ -48,6 +48,12 @@
       destroyed() {
         document.removeEventListener('keydown', this.handleKeyDown)
         document.removeEventListener('keyup', this.handleKeyUp)
+      },
+      mounted() {
+        let path = this.$route.meta.id
+        getProcessMenuByParent(path).then(res => {
+
+        });
       },
       methods: {
         handleKeyDown(e) {

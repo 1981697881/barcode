@@ -8,7 +8,16 @@ export function getRouter(userId) {
     userId: userId
   }
   return request({
-    url: '/sysMenu/getUserMenu',
+    url: '/processMenu/getProcessMenu',
+    method: 'get',
+    headers: {
+      'authorization': getToken('barrx'),
+    },
+  })
+}
+export function getProcessMenuByParent(userId) {
+  return request({
+    url: '/processMenu/getProcessMenuByParent/'+userId,
     method: 'get',
     headers: {
       'authorization': getToken('barrx'),

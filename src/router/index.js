@@ -57,7 +57,7 @@ export const StaticRouterMap = [{
         affix: true ,
       }
     }]
-  }, {
+  },/* {
     path: '/resource',
     component: Layout,
     name: 'Resource',
@@ -136,7 +136,7 @@ export const StaticRouterMap = [{
       },
     }
     ]
-  },
+  },*/
   /* {
     path: 'external-link',
     component: Layout,

@@ -146,5 +146,27 @@ export function getEmpList(data) {
     data: {}
   })
 }
-
+// 工艺路线-反审核
+export function processAgainstAudit(data) {
+  // 查询分页数据
+  const url = '/route/againstAudit/' + data
+  return request({
+    headers: {
+      'authorization': getToken('barrx')
+    },
+    url: url,
+    method: 'get',
+  })
+}// 工艺路线-审核
+export function processAudit(data) {
+  // 查询分页数据
+  const url = '/route/audit/' + data
+  return request({
+    headers: {
+      'authorization': getToken('barrx')
+    },
+    url: url,
+    method: 'get',
+  })
+}
 

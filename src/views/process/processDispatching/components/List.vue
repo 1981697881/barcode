@@ -6,6 +6,7 @@
       :loading="loading"
       :list="list"
       index
+       type
        @row-click="rowClick"
        @dblclick="dblclick"
       @handle-size="handleSize"
@@ -52,6 +53,8 @@ export default {
         { text: "派工量", name: "dispatchNum" },
         { text: "实际生产量", name: "actualProductNum" },
         { text: "合格数", name: "qualifiedNum" },
+        { text: "汇报单号", name: "reportNo" },
+        { text: "汇报日期", name: "reportDate" },
         { text: "员工签名", name: "reportName" },
         { text: "审核人", name: "auditName" },
         { text: "审核时间", name: "auditTime" },

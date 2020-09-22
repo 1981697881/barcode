@@ -25,14 +25,15 @@
         <el-col :span="2">
           <el-button :size="'mini'" type="primary" @click="query" icon="el-icon-search">查询</el-button>
         </el-col>
-        <el-button-group style="float:right">
-          <el-button :size="'mini'" type="primary" icon="el-icon-plus" @click="handleAdd">新增</el-button>
-          <el-button :size="'mini'" type="primary" icon="el-icon-edit" @click="alter">修改</el-button>
-          <el-button :size="'mini'" type="primary" icon="el-icon-news" @click="handleCopy">复制</el-button>
+        <el-button-group style="float:right" v-for="(t,i) in btnList" :key="i">
+          <el-button v-if="t.color == 'normal'" :size="'mini'" type="primary" :icon="t.cuicon" @click="onFun(t.path)">{{t.name}}</el-button>
+        <!--  <el-button :size="'mini'" type="primary" icon="el-icon-edit" @click="alter">修改</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-news" @click="handleCopy">复制</el-button>-->
           <el-upload
             name="processRoute"
             :on-success="uploadSuccess"
             :on-error="uploadError"
+            v-if="t.color == 'export'"
             accept="xlsx,xls"
             ref="upload"
             :headers="headers"
@@ -47,10 +48,10 @@
             <el-button size="mini" type="primary" icon="el-icon-upload2" >导入</el-button>
             <el-button style="margin-left: 10px;display: none" size="mini" type="success" @click="submitUpload">上传到服务器</el-button>
           </el-upload>
-         <!-- <el-button :size="'mini'" type="primary" icon="el-icon-delete" @click="Delivery">删除</el-button>-->
+         <!-- <el-button :size="'mini'" type="primary" icon="el-icon-delete" @click="Delivery">删除</el-button>
           <el-button :size="'mini'" type="primary" icon="el-icon-sort-up" @click="audit">审核</el-button>
           <el-button :size="'mini'" type="primary" icon="el-icon-sort-down" @click="unAudit">反审核</el-button>
-          <el-button :size="'mini'" type="primary" icon="el-icon-refresh" @click="upload">刷新</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-refresh" @click="upload">刷新</el-button>-->
         </el-button-group>
       </el-row>
     </el-form>
@@ -59,6 +60,8 @@
 <script>
   import { mapGetters } from "vuex";
   import {getToken} from '@/utils/auth'
+  import {getProcessMenuByParent} from "@/api/wy/menu"
+  import { processAgainstAudit, processAudit} from "@/api/basic/index"
   export default {
     components: {},
     computed: {
@@ -70,6 +73,7 @@
           'authorization': getToken('apsrx'),
         },
         isUpload: null,
+        btnList: [],
         search: {
           name: null,
           processName: null,
@@ -78,8 +82,17 @@
         }
       };
     },
-
+    mounted() {
+      let path = this.$route.meta.id
+      getProcessMenuByParent(path).then(res => {
+        this.btnList = res.data
+        this.$forceUpdate();
+      });
+    },
     methods: {
+      onFun(method){
+        this[method]()
+      },
       submitUpload() {
         this.$refs.upload.submit()
       },
@@ -144,7 +157,9 @@
       },
       audit() {
         if (this.clickData.processRouteId) {
-          this.$emit('showDialog', this.clickData)
+          processAudit(this.clickData.processRouteId).then(res => {
+            this.$emit('uploadList')
+          });
         } else {
           this.$message({
             message: "无选中行",
@@ -154,7 +169,9 @@
       },
       unAudit() {
         if (this.clickData.processRouteId) {
-          this.$emit('showDialog', this.clickData)
+          processAgainstAudit(this.clickData.processRouteId).then(res => {
+            this.$emit('uploadList')
+          });
         } else {
           this.$message({
             message: "无选中行",

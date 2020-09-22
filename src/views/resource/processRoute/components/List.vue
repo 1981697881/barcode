@@ -8,7 +8,7 @@
       index
        type
        @row-click="rowClick"
-       @dblclick="dblclick"
+
       @handle-size="handleSize"
       @handle-current="handleCurrent"
     />
@@ -50,6 +50,7 @@ export default {
         { text: "班组", name: "processTeamName" },
         { text: "创建日期", name: "createTime" },
         { text: "创建人", name: "username" },
+        { text: "状态", name: "status" },
         // { text: "审核日期", name: "" },
         // { text: "审核人", name: "" },
       ]

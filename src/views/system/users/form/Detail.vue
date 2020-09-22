@@ -53,7 +53,7 @@
             :data="data"
             show-checkbox
             :default-checked-keys="Checkeds"
-            node-key="menuId"
+            node-key="processMenuId"
             highlight-current
             :expand-on-click-node="false"
           />
@@ -97,7 +97,7 @@
 
 <script>
   import List from "@/components/List"
-    import { getSysMenuByUserId, sysUserUpdate, sysUserSave, getK3User} from "@/api/system/index";
+    import { getProcessMenuByUserId, sysUserUpdate, sysUserSave, getK3User, processMenuAdd} from "@/api/system/index";
     export default {
       components: {
         List
@@ -110,103 +110,13 @@
         },
         data() {
             return {
-              data: [{
-              "menuId":1,
-              "text":"基础资料",
-              "prId":-1,
-              "type":null,
-              "sort":null,
-              "leaf":null,
-              "checked":null,
-              "children":[
-                {
-                  "menuId":2,
-                  "text":"组织架构",
-                  "prId":1,
-                  "type":null,
-                  "sort":null,
-                  "leaf":null,
-                  "checked":null,
-                  "children":null
-                },
-                {
-                  "menuId":3,
-                  "text":"物料管理",
-                  "prId":1,
-                  "type":null,
-                  "sort":null,
-                  "leaf":null,
-                  "checked":null,
-                  "children":null
-                },
-                {
-                  "menuId":4,
-                  "text":"职员管理",
-                  "prId":1,
-                  "type":null,
-                  "sort":null,
-                  "leaf":null,
-                  "checked":null,
-                  "children":null
-                },
-                {
-                  "menuId":5,
-                  "text":"物流商管理",
-                  "prId":1,
-                  "type":null,
-                  "sort":null,
-                  "leaf":null,
-                  "checked":null,
-                  "children":null
-                },
-                {
-                  "menuId":7,
-                  "text":"生产资源管理",
-                  "prId":1,
-                  "type":null,
-                  "sort":null,
-                  "leaf":null,
-                  "checked":null,
-                  "children":null
-                },
-                {
-                  "menuId":40,
-                  "text":"规则设置",
-                  "prId":1,
-                  "type":null,
-                  "sort":null,
-                  "leaf":null,
-                  "checked":null,
-                  "children":null
-                },
-                {
-                  "menuId":41,
-                  "text":"库位管理",
-                  "prId":1,
-                  "type":null,
-                  "sort":null,
-                  "leaf":null,
-                  "checked":null,
-                  "children":null
-                },
-                {
-                  "menuId":77,
-                  "text":"报表规则",
-                  "prId":1,
-                  "type":null,
-                  "sort":null,
-                  "leaf":null,
-                  "checked":null,
-                  "children":null
-                }
-              ]
-            },
+              data: [,
           ],
               defaultProps: {
-                children: "children",
-                label: "text",
+                children: "menuList",
+                label: "name",
                 isLeaf: "leaf",
-                id: "menuId"
+                id: "processMenuId"
               },
               Checkeds: [],
               loading: false,
@@ -266,9 +176,20 @@
           }
         },
         methods: {
+          setName(datas){ //遍历树  获取id数组
+            for(var i in datas){
+              if(datas[i].checked){
+                this.Checkeds.push(datas[i].processMenuId)
+              }
+              if(datas[i].menuList){
+                this.setName(datas[i].menuList);
+              }
+            }
+          },
           fetchMenu(val) {
-            getSysMenuByUserId({id: val}).then(res => {
-              this.data = res.data.treeVoList
+            getProcessMenuByUserId(val).then(res => {
+              this.data = res.data
+              this.setName(res.data)
             });
           },
           confirm() {
@@ -293,6 +214,10 @@
               this.loading = false;
               this.list = {list: res.data};
             });
+          },
+          getChecked() {
+            let array = this.$refs.tree1.getCheckedKeys();
+            return  array
           },
           dblclick(obj, index) {
             if (obj.row.FUserID) {
@@ -339,18 +264,27 @@
                 this.$refs[form].validate((valid) => {
                     //判断必填项
                     if (valid) {
+                      console.log(this.getChecked())
                         if (typeof (this.form.id) != undefined && this.form.id != null) {
                           sysUserUpdate(this.form).then(res => {
                                 if(res.success){
-                                    this.$emit('hideDialog', false)
-                                    this.$emit('uploadList')
+                                  processMenuAdd({menuList: this.getChecked(),uid: res.data.id}).then(reso => {
+                                    if(reso.success){
+                                      this.$emit('hideDialog', false)
+                                      this.$emit('uploadList')
+                                    }
+                                  });
                                 }
                             });
                         } else {
                           sysUserSave(this.form).then(res => {
                                 if(res.success){
-                                    this.$emit('hideDialog', false)
-                                    this.$emit('uploadList')
+                                  processMenuAdd({menuList: this.getChecked(),uid: res.data.id}).then(reso => {
+                                    if(reso.success){
+                                      this.$emit('hideDialog', false)
+                                      this.$emit('uploadList')
+                                    }
+                                  });
                                 }
                             });
                         }

@@ -9,16 +9,16 @@ export function addRouter(routerlist) {
   const router = []
   routerlist.forEach(e => {
     let e_new = {
-      path:  e.id && "/"+e.id || 'norouter-'+e.fid,
-      name: e.text,
-      component: e.type==1?_router('Layout'):_router(e.id || 'error'),
+      path:  e.path && "/"+e.path || 'norouter-'+e.path,
+      name: e.name,
+      component: e.type==1?_router('Layout'):_router(e.path || 'error'),
     }
     if (e.redirect) { // 重定向
       e_new = Object.assign({}, e_new, { redirect: e.redirect })
     }
-    if (e.text) {// meta
+    if (e.name) {// meta
       e_new = Object.assign({}, e_new, {
-        meta: { title: e.text, icon: '' }
+        meta: { title: e.name, icon: '', id: e.processMenuId }
       })
     }
     if (e.children) { // 下级

@@ -222,8 +222,8 @@
         }
       },
       alter() {
-        if (this.clickData.productWorkDetailId) {
-          this.$emit('showDialog', this.clickData)
+        if (this.selections.length > 0) {
+          this.$emit('showDialog', this.selections)
         } else {
           this.$message({
             message: "无选中行",

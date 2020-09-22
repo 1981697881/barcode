@@ -14,8 +14,6 @@ const map = {
   'processDispatching': () => import('@/views/process/processDispatching/index'),
   'mission': () => import('@/views/process/mission/index'),
 
- /* 'system': () => import('@/views/system/index'),
-  'permissions': () => import('@/views/system/permissions/index'),
+  'system': () => import('@/views/system/index'),
   'users': () => import('@/views/system/users/index'),
-  'journal': () => import('@/views/system/journal/index')*/
 }

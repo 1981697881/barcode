@@ -2,7 +2,7 @@
   <div>
     <el-form :model="form1" :rules="rules" ref="form1" :label-width="'90px'" :size="'mini'">
       <el-row :gutter="20">
-        <el-col :span="24">
+        <!--<el-col :span="24">
           <el-col :span="12">
             <el-form-item :label="'任务单号'" >
               <el-input v-model="form1.workNo" disabled></el-input>
@@ -68,9 +68,9 @@
               <el-input v-model="form1.processName" disabled></el-input>
             </el-form-item>
           </el-col>
-        </el-col>
+        </el-col>-->
         <el-col :span="24">
-          <el-table el-table style="height: 300px" :data="list" border size="mini" :highlight-current-row="true">
+          <el-table el-table :height="'calc(100vh/1.5)'" :data="list" border size="mini" :highlight-current-row="true">
             <el-table-column
               v-for="(t,i) in columns"
               :key="i"
@@ -78,7 +78,7 @@
               :prop="t.name"
               :label="t.text"
               v-if="t.default!=undefined?t.default:true"
-              :width="t.width?t.width:''"
+              :width="t.width?t.width:'150px'"
             >
               <template slot-scope="scope">
                 <span v-if="scope.row.isSet">
@@ -105,9 +105,9 @@
             </el-table-column>
           </el-table>
         </el-col>
-        <el-col :span="24">
+       <!-- <el-col :span="24">
           <div class="el-table-add-row" style="width: 99.2%;" @click="addMaster()"><span>+ 添加</span></div>
-        </el-col>
+        </el-col>-->
       </el-row>
     </el-form>
     <div slot="footer" style="text-align:center;padding-top: 15px">
@@ -131,7 +131,7 @@
     },
     props: {
       listInfo: {
-        type: Object,
+        type: Array,
         default: null
       },
     },
@@ -139,25 +139,42 @@
       return {
         loading: false,
         sel: null, // 选中行
-        form1: {
-          processPlanNum: null,
-          productWorkPlanNum: null,
-          processName: null,
-          kingDeeNo: null,
-          productName: null,
-          productNumber: null,
-          processTeamName: null,
-          dispatchNum: null,
-          workDate: null,
-          processTeamId: null,
-          model: null,
-          lotNo: null,
-          projectName: null,
-          workNo: null,
-        },
+       form1: {
+         /* processPlanNum: null,
+         productWorkPlanNum: null,
+         processName: null,
+         kingDeeNo: null,
+         productName: null,
+         productNumber: null,
+         processTeamName: null,
+         dispatchNum: null,
+         workDate: null,
+         processTeamId: null,
+         model: null,
+         lotNo: null,
+         projectName: null,
+         workNo: null,*/
+       },
         visible: null,
         list: [],
         columns: [
+          { text: "任务单号", name: "workNo" },
+          { text: "生产班组", name: "processTeamName" },
+          { text: "开工日期", name: "workDate" },
+          { text: "生产者", name: "dispatchName" },
+          { text: "卡号", name: "processCard" },
+          { text: "金蝶号", name: "kingDeeNo" },
+          { text: "生产批次号", name: "lotNo" },
+          { text: "产品编码", name: "productNumber" },
+          { text: "工程名称", name: "projectName" },
+          { text: "产品名称", name: "productName" },
+          { text: "规格型号", name: "model" },
+          { text: "工序名称", name: "processName" },
+          { text: "订单量", name: "orderNum" },
+          { text: "剩余量", name: "residueNum" },
+          { text: "计划量", name: "planNum" },
+          { text: "工序计划量", name: "processPlanNum" },
+          { text: "派工量", name: "dispatchNum" },
           { text: "生产数量", name: "productNum" },
           { text: "合格数量", name: "qualifiedNum" },
         ],
@@ -176,9 +193,8 @@
 
     },
     mounted() {
-      console.log(this.listInfo)
       if(this.listInfo) {
-        this.form1 = this.listInfo
+        this.list = this.listInfo
       }
     },
     methods: {
@@ -222,7 +238,7 @@
           if (i.isSet) return this.$message.warning("请先保存当前编辑项");
         }
         this.cIndex += 10
-        let j = {isSet: true, userId: this.form1.dispatchUserId, orderNo: this.cIndex, userName: '', dispatchNum: ''};
+        let j = {isSet: true, dispatchId: '', orderNo: this.cIndex, userName: '', dispatchNum: ''};
         this.list.push(j);
         this.sel = JSON.parse(JSON.stringify(j));
       },
@@ -230,14 +246,14 @@
       pwdChange(row, index, cg) {
         //点击修改 判断是否已经保存所有操作
         for (let i of this.list) {
-          if (i.isSet && i.userId != row.userId) {
+          if (i.isSet && i.dispatchId != row.dispatchId) {
             this.$message.warning("请先保存当前编辑项");
             return false;
           }
         }
         //是否是取消操作
         if (!cg) {
-          if (!this.sel.userId) this.list.splice(index, 1);
+          if (!this.sel.dispatchId) this.list.splice(index, 1);
           return row.isSet = !row.isSet;
         }
         console.log(row.isSet)
@@ -300,9 +316,8 @@
         this.visible = true
       },
       saveData() {
-        this.$refs["form1"].validate((valid) => {
           //判断必填项
-          if (valid) {
+          if (this.list.length> 0) {
             let arrrar = []
             let result = []
             this.list.forEach((item, index) => {
@@ -310,10 +325,10 @@
               //obj.adjDate = item.
               obj.productNum = item.productNum
               obj.qualifiedNum = item.qualifiedNum
-              obj.userId = this.form1.dispatchUserId
-              obj.productWorkDetailId = this.form1.productWorkDetailId
+              obj.userId = item.dispatchUserId
+              obj.productWorkDetailId = item.productWorkDetailId
               if((obj.productNum == null || obj.productNum == '') || (obj.qualifiedNum == null || obj.qualifiedNum == '')){
-                result.push(this.form1.productWorkDetailId)
+                result.push(item.productWorkDetailId)
               }
               arrrar.push(obj)
             })
@@ -331,7 +346,6 @@
           }else {
             return false
           }
-        })
       },
     }
   };
