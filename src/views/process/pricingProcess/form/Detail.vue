@@ -29,7 +29,7 @@
             </el-col>
           </el-col>
           <el-col :span="24">
-            <el-table el-table style="height: 300px" :data="list" border size="mini" :highlight-current-row="true">
+            <el-table el-table :height="'calc(100vh/1.5)'" :data="list" border size="mini" :highlight-current-row="true">
               <el-table-column
                 v-for="(t,i) in columns"
                 :key="i"
@@ -37,7 +37,7 @@
                 :prop="t.name"
                 :label="t.text"
                 v-if="t.default!=undefined?t.default:true"
-                :width="t.width?t.width:''"
+                :width="t.width?t.width:'150px'"
               >
               <template slot-scope="scope">
                 <span v-if="scope.row.isSet">

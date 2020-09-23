@@ -25,14 +25,15 @@
         <el-col :span="2">
           <el-button :size="'mini'" type="primary" @click="query" icon="el-icon-search">查询</el-button>
         </el-col>
-        <el-button-group style="float:right" v-for="(t,i) in btnList" :key="i">
-          <el-button v-if="t.color == 'normal'" :size="'mini'" type="primary" :icon="t.cuicon" @click="onFun(t.path)">{{t.name}}</el-button>
+        <el-button-group style="float:right" >
+          <el-button v-for="(t,i) in btnList" :key="i" v-if="t.color == 'normal'" :size="'mini'" type="primary" :icon="t.cuicon" @click="onFun(t.path)">{{t.name}}</el-button>
         <!--  <el-button :size="'mini'" type="primary" icon="el-icon-edit" @click="alter">修改</el-button>
           <el-button :size="'mini'" type="primary" icon="el-icon-news" @click="handleCopy">复制</el-button>-->
           <el-upload
             name="processRoute"
             :on-success="uploadSuccess"
             :on-error="uploadError"
+            v-for="(t,i) in btnList" :key="i"
             v-if="t.color == 'export'"
             accept="xlsx,xls"
             ref="upload"

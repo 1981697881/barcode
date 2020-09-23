@@ -33,9 +33,10 @@
           <el-button :size="'mini'" type="primary" @click="query" icon="el-icon-search">查询</el-button>
         </el-col>
         <el-button-group style="float:right">
-          <el-button :size="'mini'" type="primary" icon="el-icon-edit" @click="alter">派工</el-button>
-         <!-- <el-button :size="'mini'" type="primary" icon="el-icon-delete" @click="Delivery">删除</el-button>-->
-          <el-button :size="'mini'" type="primary" icon="el-icon-refresh" @click="upload">刷新</el-button>
+          <el-button v-for="(t,i) in btnList" :key="i" v-if="t.color == 'normal'" :size="'mini'" type="primary" :icon="t.cuicon" @click="onFun(t.path)">{{t.name}}</el-button>
+          <!-- <el-button :size="'mini'" type="primary" icon="el-icon-edit" @click="alter">派工</el-button>
+         <el-button :size="'mini'" type="primary" icon="el-icon-delete" @click="Delivery">删除</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-refresh" @click="upload">刷新</el-button>-->
         </el-button-group>
       </el-row>
     </el-form>
@@ -45,6 +46,8 @@
   import { mapGetters } from "vuex";
   import {getToken} from '@/utils/auth'
   import {processList, teamList} from "@/api/basic/index";
+  import {getProcessMenuByParent} from "@/api/wy/menu"
+  import {productWorkAgainstAudit,productWorkAudit} from "@/api/process/index"
   export default {
     components: {},
     computed: {
@@ -84,6 +87,7 @@
         },
         value: [],
         valueT: [],
+        btnList: [],
         plArray: [],
         psArray: [],
         isUpload: null,
@@ -104,8 +108,16 @@
     },
     mounted() {
       this.fetchFormat()
+      let path = this.$route.meta.id
+      getProcessMenuByParent(path).then(res => {
+        this.btnList = res.data
+        this.$forceUpdate();
+      });
     },
     methods: {
+      onFun(method){
+        this[method]()
+      },
       changeCheck1(val) {
         this.$emit('queryBtn', this.qFilter())
       },
@@ -161,6 +173,30 @@
               type: 'info',
               message: '已取消删除'
             });
+          });
+        } else {
+          this.$message({
+            message: "无选中行",
+            type: "warning"
+          })
+        }
+      },
+      audit() {
+        if (this.clickData.productWorkDetailId) {
+          productWorkAudit(this.clickData.productWorkDetailId).then(res => {
+            this.$emit('uploadList')
+          });
+        } else {
+          this.$message({
+            message: "无选中行",
+            type: "warning"
+          })
+        }
+      },
+      unAudit() {
+        if (this.clickData.productWorkDetailId) {
+          productWorkAgainstAudit(this.clickData.productWorkDetailId).then(res => {
+            this.$emit('uploadList')
           });
         } else {
           this.$message({

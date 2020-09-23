@@ -198,7 +198,73 @@ export function addProductWorkReport(data) {
     data: data
   })
 }
-
+// 工序调价-反审核
+export function adjustAgainstAudit(data) {
+  // 查询分页数据
+  const url = '/adjust/againstAudit/' + data
+  return request({
+    headers: {
+      'authorization': getToken('barrx')
+    },
+    url: url,
+    method: 'get',
+  })
+}// 工序调价-审核
+export function adjustAudit(data) {
+  // 查询分页数据
+  const url = '/adjust/audit/' + data
+  return request({
+    headers: {
+      'authorization': getToken('barrx')
+    },
+    url: url,
+    method: 'get',
+  })
+}// 工序任务单-反审核
+export function productWorkAgainstAudit(data) {
+  // 查询分页数据
+  const url = '/productWork/againstAudit/' + data
+  return request({
+    headers: {
+      'authorization': getToken('barrx')
+    },
+    url: url,
+    method: 'get',
+  })
+}// 工序任务单-审核
+export function productWorkAudit(data) {
+  // 查询分页数据
+  const url = '/productWork/audit/' + data
+  return request({
+    headers: {
+      'authorization': getToken('barrx')
+    },
+    url: url,
+    method: 'get',
+  })
+}// 工序派工单-反审核
+export function productWorkDispatchAgainstAudit(data) {
+  // 查询分页数据
+  const url = '/productWorkDispatch/againstAudit/' + data
+  return request({
+    headers: {
+      'authorization': getToken('barrx')
+    },
+    url: url,
+    method: 'get',
+  })
+}// 工序派工单-审核
+export function productWorkDispatchAudit(data) {
+  // 查询分页数据
+  const url = '/productWorkDispatch/audit/' + data
+  return request({
+    headers: {
+      'authorization': getToken('barrx')
+    },
+    url: url,
+    method: 'get',
+  })
+}
 
 
 

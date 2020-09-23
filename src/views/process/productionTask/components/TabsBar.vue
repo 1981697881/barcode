@@ -39,9 +39,8 @@
         <el-col :span="2">
           <el-button :size="'mini'" type="primary" icon="el-icon-search" @click="query">查询</el-button>
         </el-col>
-        <el-button-group style="float:right">
-          <el-button :size="'mini'" type="primary" icon="el-icon-plus" @click="handleAdd">投放</el-button>
-          <el-button :size="'mini'" type="primary" icon="el-icon-refresh" @click="upload">刷新</el-button>
+        <el-button-group style="float:right" >
+          <el-button v-for="(t,i) in btnList" :key="i" v-if="t.color == 'normal'" :size="'mini'" type="primary" :icon="t.cuicon" @click="onFun(t.path)">{{t.name}}</el-button>
         </el-button-group>
       </el-row>
     </el-form>
@@ -51,11 +50,12 @@
 <script>
 // ---------------------------
 import { mapGetters } from "vuex";
-
+import {getProcessMenuByParent} from "@/api/wy/menu"
 export default {
   data() {
     return {
       value: [],
+      btnList: [],
       search: {
         cardNo: null,
         kingDeeNo: null,
@@ -102,9 +102,16 @@ export default {
     this.value[1] = this.getDay('', 0).date
   },
   mounted() {
+    let path = this.$route.meta.id
+    getProcessMenuByParent(path).then(res => {
+      this.btnList = res.data
+      this.$forceUpdate();
+    });
   },
   methods: {
-
+    onFun(method){
+      this[method]()
+    },
     // 查询前后三天日期
     getDay(date, day){
       var today = new Date();

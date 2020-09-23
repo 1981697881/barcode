@@ -11,14 +11,12 @@
           <el-button :size="'mini'" type="primary" icon="el-icon-search" @click="query">查询</el-button>
         </el-col>
         <el-button-group style="float:right">
-          <el-button :size="'mini'" type="primary" @click="handleAdd">新增</el-button>
+          <el-button v-for="(t,i) in btnList" :key="i" v-if="t.color == 'normal'" :size="'mini'" type="primary" :icon="t.cuicon" @click="onFun(t.path)">{{t.name}}</el-button>
+         <!-- <el-button :size="'mini'" type="primary" @click="handleAdd">新增</el-button>
           <el-button :size="'mini'" type="primary" @click="handleAlter">修改</el-button>
           <el-button :size="'mini'" type="primary" @click="upload">刷新</el-button>
-        <!--  <el-button :size="'mini'" type="primary"  @click="exportOrder">导出</el-button>-->
-         <!-- <el-button :size="'mini'" type="primary" >用户信息同步</el-button>-->
-         <!-- <el-button :size="'mini'" type="primary">禁用</el-button>
-          <el-button :size="'mini'" type="primary">启用</el-button>-->
-          <el-button :size="'mini'" type="primary" @click="reset">密码重置</el-button>
+
+          <el-button :size="'mini'" type="primary" @click="reset">密码重置</el-button>-->
         </el-button-group>
       </el-row>
     </el-form>
@@ -32,6 +30,7 @@
     export default {
         data() {
             return {
+              btnList: [],
               flag: true,
                 search: {
                   keyword: null
@@ -52,10 +51,14 @@
       mounted() {
         let path = this.$route.meta.id
         getProcessMenuByParent(path).then(res => {
-
+          this.btnList = res.data
+          this.$forceUpdate();
         });
       },
       methods: {
+        onFun(method){
+          this[method]()
+        },
         handleKeyDown(e) {
           var key = window.event.keyCode ? window.event.keyCode : window.event.which
           if( key === 13 ) {

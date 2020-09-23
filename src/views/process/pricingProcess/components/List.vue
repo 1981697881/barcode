@@ -51,6 +51,7 @@ export default {
         { text: "工序变更后单价", name: "adjPrice" },
         { text: "生效日期", name: "effectiveDate" },
         { text: "失效日期", name: "expiryDate" },
+        { text: "状态", name: "status" },
       ]
     };
   },

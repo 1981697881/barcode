@@ -50,6 +50,7 @@ export default {
         { text: "已派工量", name: "alreadyDispatchNum" },
         { text: "审核人", name: "auditName" },
         { text: "审核时间", name: "auditTime" },
+        { text: "状态", name: "status" },
 
       ]
     };

@@ -49,19 +49,22 @@
           <el-button :size="'mini'" type="primary" @click="query" icon="el-icon-search">查询</el-button>
         </el-col>
         <el-button-group style="float:right">
-          <el-button :size="'mini'" type="primary" icon="el-icon-plus" @click="handleAdd">新增</el-button>
-          <el-button :size="'mini'" type="primary" icon="el-icon-edit" @click="alter">修改</el-button>
-         <!-- <el-button :size="'mini'" type="primary" icon="el-icon-delete" @click="Delivery">删除</el-button>-->
-          <el-button :size="'mini'" type="primary" icon="el-icon-refresh" @click="upload">刷新</el-button>
+          <el-button v-for="(t,i) in btnList" :key="i" v-if="t.color == 'normal'" :size="'mini'" type="primary" :icon="t.cuicon" @click="onFun(t.path)">{{t.name}}</el-button>
+          <!-- <el-button :size="'mini'" type="primary" icon="el-icon-plus" @click="handleAdd">新增</el-button>
+         <el-button :size="'mini'" type="primary" icon="el-icon-edit" @click="alter">修改</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-delete" @click="Delivery">删除</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-refresh" @click="upload">刷新</el-button>-->
         </el-button-group>
       </el-row>
     </el-form>
   </div>
 </template>
 <script>
-  import { mapGetters } from "vuex";
+  import { mapGetters } from "vuex"
   import {getToken} from '@/utils/auth'
-  import {processList} from "@/api/basic/index";
+  import {processList} from "@/api/basic/index"
+  import {getProcessMenuByParent} from "@/api/wy/menu"
+  import {adjustAudit,adjustAgainstAudit} from "@/api/process/index"
   export default {
     components: {},
     computed: {
@@ -100,6 +103,7 @@
           }]
         },
         value: [],
+        btnList: [],
         plArray: [],
         isUpload: null,
         search: {
@@ -116,12 +120,44 @@
       this.value[1] = this.getDay('', 0).date
     },
     mounted() {
+      let path = this.$route.meta.id
+      getProcessMenuByParent(path).then(res => {
+        this.btnList = res.data
+        this.$forceUpdate();
+      });
       this.fetchFormat()
     },
     methods: {
+      onFun(method){
+        this[method]()
+      },
       // 切换仓库
       changeCheck(val) {
         this.$emit('queryBtn', this.qFilter())
+      },
+      audit() {
+        if (this.clickData.routeAdjustId) {
+          adjustAudit(this.clickData.routeAdjustId).then(res => {
+            this.$emit('uploadList')
+          });
+        } else {
+          this.$message({
+            message: "无选中行",
+            type: "warning"
+          })
+        }
+      },
+      unAudit() {
+        if (this.clickData.routeAdjustId) {
+          adjustAgainstAudit(this.clickData.routeAdjustId).then(res => {
+            this.$emit('uploadList')
+          });
+        } else {
+          this.$message({
+            message: "无选中行",
+            type: "warning"
+          })
+        }
       },
       fetchFormat() {
         processList().then(res => {
