@@ -215,7 +215,14 @@
       },
       alter() {
         if (this.clickData.adjustNo) {
-          this.$emit('showDialog', this.clickData)
+            if(this.clickData.status == '已审核'){
+              this.$message({
+                message: "已审核不允许修改",
+                type: "warning"
+              })
+            }else{
+              this.$emit('showDialog', this.clickData)
+            }
         } else {
           this.$message({
             message: "无选中行",

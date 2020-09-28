@@ -83,7 +83,7 @@
             </el-table>
           </el-col>
         <el-col :span="24">
-          <div class="el-table-add-row" style="width: 99.2%;" @click="setRow()"><span>+ 添加</span></div>
+          <div class="el-table-add-row" style="width: 99.2%;" v-if="isBtnClick" @click="setRow()"><span>+ 添加</span></div>
         </el-col>
       </el-row>
     </el-form>
@@ -189,6 +189,7 @@
           FChartNumber: null,
         },
         visible: null,
+        isBtnClick: false,
         list: [],
         list2: {},
         columns2: [
@@ -270,9 +271,11 @@
     mounted() {
       this.fetchFormat()
       if(this.listInfo) {
+        this.isBtnClick = false
         this.form1.createTime = this.listInfo.createTime
         this.fetchData({adjustNo: this.listInfo.adjustNo})
       } else {
+        this.isBtnClick = true
         this.getTime()
         this.form1.username = getPer('barun')
         this.form1.userId = getPer('userInfo')
@@ -476,6 +479,7 @@
               obj.effectiveDate = item.effectiveDate
               obj.expiryDate = item.expiryDate
               obj.itemId = item.itemId
+              obj.routeAdjustId = item.routeAdjustId
               obj.routeDetailId = item.processRouteDetailId
               if((obj.adjPrice == null || obj.adjPrice === '') || (obj.effectiveDate == null || obj.effectiveDate === '') || (obj.expiryDate == null || obj.expiryDate === '')){
                 result.push(item.productWorkDetailId)
@@ -488,14 +492,14 @@
                 message: "请输入必填项!"
               });
             }
-            if (typeof (this.form1.id) != undefined && this.form1.id != null) {
-              processAdjustUpdate(arrrar).then(res => {
+            if (this.isBtnClick) {
+              processAdjustAdd(arrrar).then(res => {
                 this.$emit('hideDialog')
                 this.$emit('uploadList')
               });
               //保存
             }else{
-              processAdjustAdd(arrrar).then(res => {
+              processAdjustUpdate(arrrar).then(res => {
                 this.$emit('hideDialog')
                 this.$emit('uploadList')
               });

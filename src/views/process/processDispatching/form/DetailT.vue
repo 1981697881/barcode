@@ -325,6 +325,7 @@
               //obj.adjDate = item.
               obj.productNum = item.productNum
               obj.qualifiedNum = item.qualifiedNum
+              obj.dispatchId = item.dispatchId
               obj.userId = item.dispatchUserId
               obj.productWorkDetailId = item.productWorkDetailId
               if((obj.productNum == null || obj.productNum == '') || (obj.qualifiedNum == null || obj.qualifiedNum == '')){
