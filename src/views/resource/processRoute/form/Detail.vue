@@ -103,19 +103,19 @@
                 <span v-if="scope.row.isSet">
                   <el-input size="mini" v-if="t.name == 'orderNo'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input>
-                  <el-input size="mini" v-if="t.name == 'description'" placeholder="请输入内容" v-model="sel[t.name]">
+                  <el-input size="mini" v-else-if="t.name == 'description'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input>
-                  <el-input size="mini" v-if="t.name == 'diploid'" placeholder="请输入内容" v-model="sel[t.name]">
+                  <el-input size="mini" v-else-if="t.name == 'diploid'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input>
-                  <el-input size="mini" v-if="t.name == 'price'" placeholder="请输入内容" v-model="sel[t.name]">
+                  <el-input size="mini" v-else-if="t.name == 'price'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input>
-                  <!--<el-input size="mini" v-if="t.name == 'processNumber'" placeholder="请输入内容" v-model="sel[t.name]">
+                  <!--<el-input size="mini" v-else-if="t.name == 'processNumber'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input>
-                  <el-input size="mini" v-if="t.name == 'controlCodeNumber'" placeholder="请输入内容" v-model="sel[t.name]">
+                  <el-input size="mini" v-else-if="t.name == 'controlCodeNumber'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input>
-                  <el-input size="mini" v-if="t.name == 'processTeamNumber'" placeholder="请输入内容" v-model="sel[t.name]">
+                  <el-input size="mini" v-else-if="t.name == 'processTeamNumber'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input>-->
-                  <el-select size="mini" v-if="t.name == 'processName'" v-model="sel[t.name]" placeholder="请选择" @change="changeProcessId($event, sel)">
+                  <el-select size="mini" v-else-if="t.name == 'processName'" v-model="sel[t.name]" placeholder="请选择" @change="changeProcessId($event, sel)">
                     <el-option
                       v-for="(t,i) in plArray"
                       :key="i"
@@ -123,7 +123,7 @@
                       :value="t.FName">
                     </el-option>
                   </el-select>
-                  <el-select size="mini" v-if="t.name == 'controlCodeName'" v-model="sel[t.name]" placeholder="请选择" @change="changeCodeTeamId($event, sel)">
+                  <el-select size="mini" v-else-if="t.name == 'controlCodeName'" v-model="sel[t.name]" placeholder="请选择" @change="changeCodeTeamId($event, sel)">
                     <el-option
                       v-for="(t,i) in pzArray"
                       :key="i"
@@ -131,7 +131,7 @@
                       :value="t.FName">
                     </el-option>
                   </el-select>
-                  <el-select size="mini" v-if="t.name == 'processTeamName'" v-model="sel[t.name]" placeholder="请选择" @change="changeProcessTeamId($event, sel)">
+                  <el-select size="mini" v-else-if="t.name == 'processTeamName'" v-model="sel[t.name]" placeholder="请选择" @change="changeProcessTeamId($event, sel)">
                     <el-option
                       v-for="(t,i) in psArray"
                       :key="i"
@@ -139,6 +139,7 @@
                       :value="t.FName">
                     </el-option>
                   </el-select>
+                   <span v-else>{{sel[t.name]}}</span>
                 </span>
                 <span v-else>{{scope.row[t.name]}}</span>
               </template>

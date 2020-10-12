@@ -43,9 +43,8 @@
                 <span v-if="scope.row.isSet">
                   <el-input size="mini" v-if="t.name == 'adjPrice'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input>
-                  <div class="block">
+                  <div class="block"  v-else-if="t.name == 'effectiveDate'">
                   <el-date-picker
-                    v-if="t.name == 'effectiveDate'"
                     v-model="sel[t.name]"
                     type="date"
                     size="mini"
@@ -53,9 +52,8 @@
                     placeholder="选择日期">
                   </el-date-picker>
                 </div>
-                  <div class="block">
+                  <div class="block"  v-else-if="t.name == 'expiryDate'">
                   <el-date-picker
-                    v-if="t.name == 'expiryDate'"
                     v-model="sel[t.name]"
                     type="date"
                     size="mini"
@@ -63,6 +61,7 @@
                     placeholder="选择日期">
                   </el-date-picker>
                 </div>
+                   <span v-else>{{sel[t.name]}}</span>
                 </span>
                 <span v-else>{{scope.row[t.name]}}</span>
               </template>

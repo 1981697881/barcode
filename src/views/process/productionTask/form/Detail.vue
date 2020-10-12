@@ -15,14 +15,14 @@
             >
               <template slot-scope="scope">
                 <span v-if="scope.row.isSet">
-                  <el-input size="mini" v-if="t.name == 'FBatchNO'" placeholder="请输入内容" v-model="sel[t.name]">
-                  </el-input>
-                  <el-input-number size="mini" v-if="t.name == 'FPlanQty'" placeholder="请输入内容" v-model="sel[t.name]">
-                  </el-input-number> <el-input-number size="mini" v-if="t.name == 'putNum'" placeholder="请输入内容" v-model="sel[t.name]">
+                  <el-input size="mini" v-if="t.name == 'FBatchNO'" placeholder="请输入内容" v-model="sel[t.name]"></el-input>
+                  <el-input-number size="mini" v-else-if="t.name == 'FPlanQty'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input-number>
-                  <div class="block">
+                  <el-input-number size="mini" v-else-if="t.name == 'putNum'" placeholder="请输入内容" v-model="sel[t.name]">
+                  </el-input-number>
+                  <div class="block"  v-else-if="t.name == 'FPlanCommitDate'">
                   <el-date-picker
-                    v-if="t.name == 'FPlanCommitDate'"
+
                     v-model="sel[t.name]"
                     type="date"
                     size="mini"
@@ -30,9 +30,9 @@
                     placeholder="选择日期">
                   </el-date-picker>
                 </div>
-                  <div class="block">
+                  <div class="block"  v-else-if="t.name == 'FPlanFinishDate'">
                   <el-date-picker
-                    v-if="t.name == 'FPlanFinishDate'"
+
                     v-model="sel[t.name]"
                     type="date"
                     size="mini"
@@ -40,6 +40,7 @@
                     placeholder="选择日期">
                   </el-date-picker>
                 </div>
+                  <span v-else>{{sel[t.name]}}</span>
                 </span>
                 <span v-else>{{scope.row[t.name]}}</span>
               </template>
@@ -238,21 +239,14 @@
     },*/
     mounted() {
       if (this.listInfo) {
-        console.log(this.listInfo)
        this.list = this.listInfo
-       /* listInfo.forEach((item, index) =>{
-          let obj = {}
-          obj.saleOrderNo = me.listInfo.FOrderNo
-          obj.processCard = me.listInfo.FCardNo
-          obj.projectName = me.listInfo.FPrjName
-          obj.kingdeeNo = me.listInfo.FKDNo
-          obj.orderNum = me.listInfo.FAuxQty
-          obj.planNum = me.listInfo.FAuxQty
-          obj.itemId = me.listInfo.FItemID
-          obj.planProductNo = me.listInfo.FICMONo
-          obj.planProductNum = me.listInfo.FActQty
-          obj.residueNum = me.listInfo.FRemainQty
-        })*/
+         this.list.forEach((item, index) =>{
+           item.FBatchNO == null || item.FBatchNO == '' ? item.FBatchNO = item.FKDNo : item.FBatchNO = item.FBatchNO
+           item.FPlanQty == null || item.FPlanQty == '' ? item.FPlanQty = item.FAuxQty : item.FPlanQty = item.FPlanQty
+           item.putNum == null || typeof item.putNum == 'undefined' ? item.putNum = item.FRemainQty : item.putNum = item.putNum
+           item.FPlanCommitDate == null || item.FPlanCommitDate == '' ? item.FPlanCommitDate = this.getDay('', 0).date : item.FPlanCommitDate = item.FPlanCommitDate
+           item.FPlanCommitDate == null || item.FPlanCommitDate == '' ? item.FPlanCommitDate = item.FPlanFinishDate : item.FPlanCommitDate = item.FPlanCommitDate
+        })
       }
     },
     methods: {

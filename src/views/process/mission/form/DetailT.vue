@@ -100,7 +100,7 @@
                 <span v-if="scope.row.isSet">
                   <el-input-number size="mini" v-if="t.name == 'dispatchNum'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input-number>
-                  <el-select size="mini" v-if="t.name == 'userName'" v-model="sel[t.name]" placeholder="请选择" @change="changeUserId($event, sel)">
+                  <el-select size="mini" v-else-if="t.name == 'userName'" v-model="sel[t.name]" placeholder="请选择" @change="changeUserId($event, sel)">
                     <el-option
                       v-for="(t,i) in plArray"
                       :key="i"
@@ -108,6 +108,7 @@
                       :value="t.FName">
                     </el-option>
                   </el-select>
+                  <span v-else>{{sel[t.name]}}</span>
                 </span>
                 <span v-else>{{scope.row[t.name]}}</span>
               </template>

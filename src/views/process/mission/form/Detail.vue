@@ -67,9 +67,9 @@
                   </el-input-number>
                  <!-- <el-input-number size="mini" v-if="t.name == 'residueNum'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input-number>-->
-                  <el-input size="mini" v-if="t.name == 'orderNo'" placeholder="请输入内容" v-model="sel[t.name]">
+                  <el-input size="mini"v-else-if="t.name == 'orderNo'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input>
-                  <el-select size="mini" v-if="t.name == 'processName'" v-model="sel[t.name]" placeholder="请选择" @change="changeProcessId($event, sel)">
+                  <el-select size="mini"v-else-if="t.name == 'processName'" v-model="sel[t.name]" placeholder="请选择" @change="changeProcessId($event, sel)">
                     <el-option
                       v-for="(t,i) in plArray"
                       :key="i"
@@ -77,6 +77,7 @@
                       :value="t.FName">
                     </el-option>
                   </el-select>
+                   <span v-else>{{sel[t.name]}}</span>
                 </span>
                 <span v-else>{{scope.row[t.name]}}</span>
               </template>

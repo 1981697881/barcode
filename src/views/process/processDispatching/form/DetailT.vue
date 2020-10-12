@@ -84,8 +84,9 @@
                 <span v-if="scope.row.isSet">
                   <el-input-number size="mini" v-if="t.name == 'productNum'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input-number>
-                  <el-input-number size="mini" v-if="t.name == 'qualifiedNum'" placeholder="请输入内容" v-model="sel[t.name]">
+                  <el-input-number size="mini" v-else-if="t.name == 'qualifiedNum'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input-number>
+                  <span v-else>{{sel[t.name]}}</span>
                 </span>
                 <span v-else>{{scope.row[t.name]}}</span>
               </template>

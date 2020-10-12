@@ -258,6 +258,7 @@
         }
       },
       alter() {
+        console.log(this.selections)
         if (this.selections.length > 0) {
           this.$emit('showDialog', this.selections)
         } else {
