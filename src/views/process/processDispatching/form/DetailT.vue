@@ -82,9 +82,9 @@
             >
               <template slot-scope="scope">
                 <span v-if="scope.row.isSet">
-                  <el-input-number size="mini" v-if="t.name == 'productNum'" placeholder="请输入内容" v-model="sel[t.name]">
+                  <el-input-number size="mini" v-if="t.name == 'productNum'" :min="1" :max="sel['dispatchNum']" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input-number>
-                  <el-input-number size="mini" v-else-if="t.name == 'qualifiedNum'" placeholder="请输入内容" v-model="sel[t.name]">
+                  <el-input-number size="mini" v-else-if="t.name == 'qualifiedNum'" :min="1" :max="sel['productNum']" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input-number>
                   <span v-else>{{sel[t.name]}}</span>
                 </span>
