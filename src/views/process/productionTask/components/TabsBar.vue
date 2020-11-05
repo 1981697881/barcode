@@ -145,8 +145,8 @@ export default {
       this.value != null && this.value != undefined ? obj.startDate = this.value[0] : null
       this.search.cardNo != null && this.search.cardNo != undefined ? obj.cardNo = this.search.cardNo : null
       this.search.kingDeeNo != null && this.search.kingDeeNo != undefined ? obj.kingDeeNo = this.search.kingDeeNo : null
-      this.search.productName != null && this.search.productName != undefined ? obj.startDate = this.search.productName : null
-      this.search.productNumber != null && this.search.productNumber != undefined ? obj.startDate = this.search.productNumber : null
+      this.search.productName != null && this.search.productName != undefined ? obj.productName = this.search.productName : null
+      this.search.productNumber != null && this.search.productNumber != undefined ? obj.productNumber = this.search.productNumber : null
       return obj
     },
     handleAdd(){

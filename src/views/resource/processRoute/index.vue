@@ -25,6 +25,7 @@
   import { Info } from "./form";
 
   export default {
+
     components: {
       TabsBar,
       List,

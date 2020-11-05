@@ -28,7 +28,7 @@
 <script>
 import ScrollPane from './ScrollPane'
 import path from 'path'
-
+import Bus from '@/bus.js'
 export default {
   components: { ScrollPane },
   data() {
@@ -133,25 +133,33 @@ export default {
       })
     },
     closeSelectedTag(view) {
-      this.$store.dispatch('tagsView/delView', view).then(({ visitedViews }) => {
+      this.$store.dispatch("tagsView/delView", view).then(({ visitedViews }) => {
         if (this.isActive(view)) {
-          this.toLastView(visitedViews, view)
+          const latestView = visitedViews.slice(-1)[0];
+          if (latestView) {
+            this.$router.push(latestView);
+          } else {
+            this.$router.push("/");
+          }
         }
-      })
+        //关闭单个
+        Bus.$emit('removeCache','closeSelectedTag',view)
+      });
     },
     closeOthersTags() {
-      this.$router.push(this.selectedTag)
-      this.$store.dispatch('tagsView/delOthersViews', this.selectedTag).then(() => {
-        this.moveToCurrentTag()
-      })
+      this.$router.push(this.selectedTag);
+      //关闭其他
+      Bus.$emit('removeCache','closeOthersTags',this.selectedTag);
+      this.$store.dispatch("tagsView/delOthersViews", this.selectedTag).then(() => {
+        this.moveToCurrentTag();
+      });
     },
     closeAllTags(view) {
-      this.$store.dispatch('tagsView/delAllViews').then(({ visitedViews }) => {
-        if (this.affixTags.some(tag => tag.path === view.path)) {
-          return
-        }
-        this.toLastView(visitedViews, view)
-      })
+      this.$store.dispatch("tagsView/delAllViews").then(({ visitedViews }) => {
+        this.toLastView(visitedViews, view);
+        //关闭所有
+        Bus.$emit('removeCache','closeAllTags')
+      });
     },
     toLastView(visitedViews, view) {
       const latestView = visitedViews.slice(-1)[0]
