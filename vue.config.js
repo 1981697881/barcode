@@ -42,8 +42,8 @@ module.exports = {
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
-        target: `http://xyy.gzfzdev.com:10010`, // 修改后台接口地址
-        //target: `http://61.146.130.53:50431/process`,
+        //target: `http://xyy.gzfzdev.com:10010`, // 修改后台接口地址
+        target: `http://61.146.130.53:50431/process`,
         changeOrigin: true, // 必须加上跨域
         ws: false,
         secure: false,
