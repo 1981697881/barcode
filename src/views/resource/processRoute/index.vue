@@ -42,8 +42,11 @@
     },
     methods: {
       delivery(obj) {
+        console.log(obj)
+        console.log(123)
         if(obj) {
-          this.$refs.list.Delivery(obj.eid)
+          this.$refs.list.Delivery(obj.processRouteId)
+
         }
       },
       hideWindow(val) {

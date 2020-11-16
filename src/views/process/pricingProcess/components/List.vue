@@ -16,7 +16,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getAdjustList } from "@/api/process/index";
+import { getAdjustList, delAdjust } from "@/api/process/index";
 import List from "@/components/List";
 export default {
   components: {
@@ -59,6 +59,14 @@ export default {
 
   },
   methods: {
+    Delivery(val) {
+      delAdjust(val).then(res => {
+        if(res.success){
+          this.$store.dispatch("list/setClickData", '');
+          this.$emit('uploadList')
+        }
+      });
+    },
     //监听每页显示几条
     handleSize(val) {
       this.list.pageSize = val

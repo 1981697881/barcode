@@ -169,4 +169,23 @@ export function processAudit(data) {
     method: 'get',
   })
 }
+// 工艺路线-删除
+export function delProcessRoute(params) {
+  return request({
+    url: '/route/deleteByProcessRouteId/' + params,
+    headers: {
+      'authorization': getToken('apsrx')
+    },
+    method: 'get',
+  })
+}// 工艺路线明细-删除
+export function delProcessRouteDetail(params) {
+  return request({
+    url: '/route/deleteByProcessRouteDetailId/' + params,
+    headers: {
+      'authorization': getToken('apsrx')
+    },
+    method: 'get',
+  })
+}
 

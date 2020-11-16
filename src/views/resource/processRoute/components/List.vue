@@ -17,7 +17,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getRouteList } from "@/api/basic/index";
+import { getRouteList, delProcessRoute } from "@/api/basic/index";
 import List from "@/components/List";
 export default {
   components: {
@@ -35,6 +35,7 @@ export default {
       prId: null,
       columns: [
         { text: "processRouteId", name: "processRouteId",default:false },
+        { text: "单号", name: "routeNo" },
         { text: "物料代码", name: "number" },
         { text: "物料名称", name: "name" },
         { text: "规格型号", name: "model" },
@@ -60,6 +61,14 @@ export default {
 
   },
   methods: {
+    Delivery(val) {
+      delProcessRoute(val).then(res => {
+        if(res.success){
+          this.$store.dispatch("list/setClickData", '');
+          this.$emit('uploadList')
+        }
+      });
+    },
     //监听每页显示几条
     handleSize(val) {
       this.list.pageSize = val

@@ -220,6 +220,17 @@ export function adjustAudit(data) {
     url: url,
     method: 'get',
   })
+}// 工序调价-删除
+export function delAdjust(data) {
+  // 查询分页数据
+  const url = '/adjust/delete/' + data
+  return request({
+    headers: {
+      'authorization': getToken('barrx')
+    },
+    url: url,
+    method: 'get',
+  })
 }// 工序任务单-反审核
 export function productWorkAgainstAudit(data) {
   // 查询分页数据
@@ -242,6 +253,17 @@ export function productWorkAudit(data) {
     url: url,
     method: 'get',
   })
+}// 工序任务单-删除
+export function delProductWorkAudit(data) {
+  // 查询分页数据
+  const url = '/productWorkDispatch/delete/' + data
+  return request({
+    headers: {
+      'authorization': getToken('barrx')
+    },
+    url: url,
+    method: 'get',
+  })
 }// 工序派工单-反审核
 export function productWorkDispatchAgainstAudit(data) {
   // 查询分页数据
@@ -257,6 +279,17 @@ export function productWorkDispatchAgainstAudit(data) {
 export function productWorkDispatchAudit(data) {
   // 查询分页数据
   const url = '/productWorkDispatch/audit/' + data
+  return request({
+    headers: {
+      'authorization': getToken('barrx')
+    },
+    url: url,
+    method: 'get',
+  })
+}// 工序派工单-删除
+export function delProductWorkDispatch(data) {
+  // 查询分页数据
+  const url = '/productWorkDispatch/delete/' + data
   return request({
     headers: {
       'authorization': getToken('barrx')

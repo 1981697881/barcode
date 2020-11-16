@@ -107,8 +107,8 @@
                   </el-input>
                   <el-input size="mini" v-else-if="t.name == 'diploid'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input>
-                  <el-input size="mini" v-else-if="t.name == 'price'" placeholder="请输入内容" v-model="sel[t.name]">
-                  </el-input>
+                <!--  <el-input size="mini" v-else-if="t.name == 'price'" placeholder="请输入内容" v-model="sel[t.name]">
+                  </el-input>-->
                   <!--<el-input size="mini" v-else-if="t.name == 'processNumber'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input>
                   <el-input size="mini" v-else-if="t.name == 'controlCodeNumber'" placeholder="请输入内容" v-model="sel[t.name]">
@@ -229,7 +229,7 @@
 </template>
 
 <script>
-  import {teamList, controlList, processList, processRouteAdd, getItemList, processRouteUpdate, routeListInfo, getItemsList} from "@/api/basic/index";
+  import {teamList, controlList, processList, processRouteAdd, getItemList, processRouteUpdate, routeListInfo, getItemsList, delProcessRouteDetail} from "@/api/basic/index";
   import {
     getPer
   } from '@/utils/auth'
@@ -284,6 +284,7 @@
         ],
         columns: [
           { text: "id", name: "id", default: false },
+          { text: "单号", name: "routeNo" },
           { text: "工序顺序号", name: "orderNo" },
           { text: "工序代码", name: "processNumber" },
           { text: "工序名称", name: "processName" },
@@ -450,7 +451,12 @@
       },
       //删除带确认区 单行删除
       deleteRow(index, rows) {
-        rows.splice(index, 1);
+        delProcessRouteDetail(rows[index].processRouteDetailId).then(res => {
+          if(res.success){
+            rows.splice(index, 1);
+            this.$emit('uploadList')
+          }
+        });
       },
       changeItem(val) {
         this.pArray.forEach((item, index) => {
