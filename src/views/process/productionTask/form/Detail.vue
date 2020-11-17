@@ -22,7 +22,7 @@
                   </el-input-number>
                   <div class="block"  v-else-if="t.name == 'FPlanCommitDate'">
                   <el-date-picker
-
+                    @change="changeDate($event,sel)"
                     v-model="sel[t.name]"
                     type="date"
                     size="mini"
@@ -32,7 +32,6 @@
                 </div>
                   <div class="block"  v-else-if="t.name == 'FPlanFinishDate'">
                   <el-date-picker
-
                     v-model="sel[t.name]"
                     type="date"
                     size="mini"
@@ -245,11 +244,15 @@
            item.FPlanQty == null || item.FPlanQty == '' ? item.FPlanQty = item.FAuxQty : item.FPlanQty = item.FPlanQty
            item.putNum == null || typeof item.putNum == 'undefined' ? item.putNum = item.FRemainQty : item.putNum = item.putNum
            item.FPlanCommitDate == null || item.FPlanCommitDate == '' ? item.FPlanCommitDate = this.getDay('', 0).date : item.FPlanCommitDate = item.FPlanCommitDate
-           item.FPlanCommitDate == null || item.FPlanCommitDate == '' ? item.FPlanCommitDate = item.FPlanFinishDate : item.FPlanCommitDate = item.FPlanCommitDate
+           item.FPlanCommitDate == null || item.FPlanCommitDate == '' ? item.FPlanFinishDate = null : item.FPlanFinishDate = item.FPlanCommitDate
+           item.FAuxQty == null || item.FAuxQty == '' ? item.FRemainQty = 0 : (Number(item.FAuxQty) - Number(item.FPutNum) < 0 ? item.FRemainQty = 0 : item.FRemainQty = Number(item.FAuxQty) - Number(item.FPutNum))
         })
       }
     },
     methods: {
+      changeDate(val, row){
+        this.$set(row, 'FPlanFinishDate',val)
+      },
       //修改
       pwdChange(row, index, cg) {
         //点击修改 判断是否已经保存所有操作

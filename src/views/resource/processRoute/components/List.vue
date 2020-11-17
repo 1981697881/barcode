@@ -17,7 +17,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getRouteList, delProcessRoute } from "@/api/basic/index";
+import { getRouteList, delProcessRouteDetail } from "@/api/basic/index";
 import List from "@/components/List";
 export default {
   components: {
@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     Delivery(val) {
-      delProcessRoute(val).then(res => {
+      delProcessRouteDetail(val).then(res => {
         if(res.success){
           this.$store.dispatch("list/setClickData", '');
           this.$emit('uploadList')

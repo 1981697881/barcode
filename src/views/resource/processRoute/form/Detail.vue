@@ -9,8 +9,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item :label="'物料代码'" >
-              <el-input v-model="form1.FNumber" disabled></el-input>
+            <el-form-item :label="'物料代码'">
+              <el-input v-model="form1.FNumber" readonly></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="4">
@@ -20,7 +20,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item :label="'物料名称'" >
-              <el-input v-model="form1.FName" disabled></el-input>
+              <el-input v-model="form1.FName" readonly></el-input>
             </el-form-item>
           </el-col>
           <!--<el-col :span="7">
@@ -40,7 +40,7 @@
           <el-col :span="24">
             <el-col :span="12">
               <el-form-item :label="'创建人'" >
-                <el-input v-model="form1.username" disabled></el-input>
+                <el-input v-model="form1.username" readonly></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -64,19 +64,19 @@
           <el-col :span="24">
             <el-col :span="12">
               <el-form-item :label="'规格型号'" >
-                <el-input  v-model="form1.FModel" disabled></el-input>
+                <el-input  v-model="form1.FModel" readonly></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item :label="'计量单位'" >
-                <el-input v-model="form1.FUnitName" disabled></el-input>
+                <el-input v-model="form1.FUnitName" readonly></el-input>
               </el-form-item>
             </el-col>
           </el-col>
           <el-col :span="24">
             <el-col :span="12">
               <el-form-item :label="'图号'" >
-                <el-input  v-model="form1.FChartNumber" disabled></el-input>
+                <el-input  v-model="form1.FChartNumber" readonly></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -107,8 +107,8 @@
                   </el-input>
                   <el-input size="mini" v-else-if="t.name == 'diploid'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input>
-                <!--  <el-input size="mini" v-else-if="t.name == 'price'" placeholder="请输入内容" v-model="sel[t.name]">
-                  </el-input>-->
+                  <el-input size="mini" v-else-if="t.name == 'price' && scope.row.routeNo == null" placeholder="请输入内容" v-model="sel[t.name]">
+                  </el-input>
                   <!--<el-input size="mini" v-else-if="t.name == 'processNumber'" placeholder="请输入内容" v-model="sel[t.name]">
                   </el-input>
                   <el-input size="mini" v-else-if="t.name == 'controlCodeNumber'" placeholder="请输入内容" v-model="sel[t.name]">
@@ -303,6 +303,8 @@
         rules: {
           note: [
             {required: true, message: '请输入值', trigger: 'blur'},
+          ],FNumber: [
+            {required: true, message: '请选择物料', trigger: 'change'},
           ],
           createTime: [
             {required: true, message: '请选择时间', trigger: 'change'}
@@ -405,7 +407,7 @@
           if (i.isSet) return this.$message.warning("请先保存当前编辑项");
         }
         this.cIndex += 10
-        let j = {isSet: true, orderNo: this.cIndex, processNumber: '', processName: '', processId: '', description: '', controlCodeId: '', controlCodeName: '', diploid: 1, price: '', processTeamNumber: '', processTeamId: '', processTeamName: ''};
+        let j = {isSet: true,routeNo: null, orderNo: this.cIndex, processNumber: '', processName: '', processId: '', description: '', controlCodeId: '', controlCodeName: '', diploid: 1, price: '', processTeamNumber: '', processTeamId: '', processTeamName: ''};
         this.list.push(j);
         this.sel = JSON.parse(JSON.stringify(j));
       },
@@ -451,12 +453,16 @@
       },
       //删除带确认区 单行删除
       deleteRow(index, rows) {
-        delProcessRouteDetail(rows[index].processRouteDetailId).then(res => {
-          if(res.success){
-            rows.splice(index, 1);
-            this.$emit('uploadList')
-          }
-        });
+        if(rows[index].processRouteDetailId != null && rows[index].processRouteDetailId != undefined){
+          delProcessRouteDetail(rows[index].processRouteDetailId).then(res => {
+            if(res.success){
+              rows.splice(index, 1);
+              this.$emit('uploadList')
+            }
+          });
+        }else {
+          rows.splice(index, 1);
+        }
       },
       changeItem(val) {
         this.pArray.forEach((item, index) => {
@@ -546,6 +552,7 @@
           obj.diploid = item.diploid
           obj.price = item.price
           obj.processTeamNumber = item.processTeamNumber
+          obj.processId = item.processId
           obj.processTeamId = item.processTeamId
           obj.processTeamName = item.processTeamName
           this.list.push(obj)
@@ -555,37 +562,44 @@
         this.$refs["form1"].validate((valid) => {
           //判断必填项
           if (valid) {
-            let result = []
-            this.list.forEach((item, index) => {
-              item.id = item.processRouteDetailId
-              delete item.ProcessNumber
-              delete item.processRouteDetailId
-              delete item.ProcessTeamNumber
-              delete item.isSet
-              delete item.processRouteId
-              if((item.orderNo == null || item.orderNo == '') || (item.processName == null || item.processName == '') || (item.controlCodeName == null || item.controlCodeName == '') || (item.diploid == null || item.diploid == '') || (item.processTeamName == null || item.processTeamName == '')){
-                result.push(item.id)
+            if(this.form1.FNumber !=null && this.form1.FNumber !=''){
+              let result = []
+              this.list.forEach((item, index) => {
+                item.id = item.processRouteDetailId
+                delete item.ProcessNumber
+                delete item.processRouteDetailId
+                delete item.ProcessTeamNumber
+                delete item.isSet
+                delete item.processRouteId
+                if((item.orderNo == null || item.orderNo == '') || (item.processName == null || item.processName == '') || (item.controlCodeName == null || item.controlCodeName == '') || (item.diploid == null || item.diploid == '') || (item.processTeamName == null || item.processTeamName == '')){
+                  result.push(item.id)
+                }
+              })
+              //修改
+              delete this.form1.createTime
+              this.form1.detailList = this.list
+              if(result.length > 0 || this.form1.detailList.length <= 0){
+                return this.$message({
+                  type: 'error',
+                  message: "请输入必填项!"
+                });
               }
-            })
-            //修改
-            delete this.form1.createTime
-            this.form1.detailList = this.list
-            if(result.length > 0 || this.form1.detailList.length <= 0){
+              if (typeof (this.form1.id) != undefined && this.form1.id != null) {
+                processRouteUpdate(this.form1).then(res => {
+                  this.$emit('hideDialog')
+                  this.$emit('uploadList')
+                });
+                //保存
+              }else{
+                processRouteAdd(this.form1).then(res => {
+                  this.$emit('hideDialog')
+                  this.$emit('uploadList')
+                });
+              }
+            }else{
               return this.$message({
                 type: 'error',
-                message: "请输入必填项!"
-              });
-            }
-            if (typeof (this.form1.id) != undefined && this.form1.id != null) {
-              processRouteUpdate(this.form1).then(res => {
-                this.$emit('hideDialog')
-                this.$emit('uploadList')
-              });
-              //保存
-            }else{
-              processRouteAdd(this.form1).then(res => {
-                this.$emit('hideDialog')
-                this.$emit('uploadList')
+                message: "请选择物料!"
               });
             }
           }else {

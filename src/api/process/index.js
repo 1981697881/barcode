@@ -254,9 +254,9 @@ export function productWorkAudit(data) {
     method: 'get',
   })
 }// 工序任务单-删除
-export function delProductWorkAudit(data) {
+export function delProductWork(data) {
   // 查询分页数据
-  const url = '/productWorkDispatch/delete/' + data
+  const url = '/productWork/delete/' + data
   return request({
     headers: {
       'authorization': getToken('barrx')

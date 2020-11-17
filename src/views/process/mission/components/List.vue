@@ -16,7 +16,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getProductWorkList, delProductWorkAudit } from "@/api/process/index";
+import { getProductWorkList, delProductWork } from "@/api/process/index";
 import List from "@/components/List";
 export default {
   components: {
@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     Delivery(val) {
-      delProductWorkAudit(val).then(res => {
+      delProductWork(val).then(res => {
         if(res.success){
           this.$store.dispatch("list/setClickData", '');
           this.$emit('uploadList')

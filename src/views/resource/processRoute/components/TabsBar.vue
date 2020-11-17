@@ -124,14 +124,14 @@
         }
       },
       Delivery() {
-        if (this.clickData.processRouteId) {
+        if (this.clickData.processRouteDetailId) {
           this.$confirm('是否删除（' + this.clickData.name + '），删除后将无法恢复?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
             this.$emit('delList', {
-              processRouteId: this.clickData.processRouteId
+              processRouteDetailId: this.clickData.processRouteDetailId
             })
           }).catch(() => {
             this.$message({
@@ -181,6 +181,7 @@
         }
       },
       handleCopy() {
+        console.log(this.selections)
         if (this.selections.length) {
           this.$message({
             message: "复制成功",

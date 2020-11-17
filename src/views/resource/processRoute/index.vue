@@ -45,7 +45,7 @@
         console.log(obj)
         console.log(123)
         if(obj) {
-          this.$refs.list.Delivery(obj.processRouteId)
+          this.$refs.list.Delivery(obj.processRouteDetailId)
 
         }
       },
