@@ -586,15 +586,19 @@
               }
               if (typeof (this.form1.id) != undefined && this.form1.id != null) {
                 processRouteUpdate(this.form1).then(res => {
-                  this.$emit('hideDialog')
-                  this.$emit('uploadList')
-                });
+                  if(res.success){
+                    this.$emit('hideDialog')
+                    this.$emit('uploadList')
+                  }
+                })
                 //保存
               }else{
                 processRouteAdd(this.form1).then(res => {
-                  this.$emit('hideDialog')
-                  this.$emit('uploadList')
-                });
+                  if(res.success){
+                    this.$emit('hideDialog')
+                    this.$emit('uploadList')
+                  }
+                })
               }
             }else{
               return this.$message({
