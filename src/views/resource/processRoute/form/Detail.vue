@@ -406,13 +406,23 @@
         for (let i of this.list) {
           if (i.isSet) return this.$message.warning("请先保存当前编辑项");
         }
-        this.cIndex += 10
+        this.cIndex = (this.list.length*10+10)
         let j = {isSet: true,routeNo: null, orderNo: this.cIndex, processNumber: '', processName: '', processId: '', description: '', controlCodeId: '', controlCodeName: '', diploid: 1, price: '', processTeamNumber: '', processTeamId: '', processTeamName: ''};
         this.list.push(j);
         this.sel = JSON.parse(JSON.stringify(j));
       },
+       getSameNum(val,arr){
+          let processArr = arr.filter(function(value) {
+            return value == val;
+          })
+          return processArr.length;
+      },
       //修改
       pwdChange(row, index, cg) {
+        let result = []
+        if(this.sel == null){
+          this.sel = row
+        }
         //点击修改 判断是否已经保存所有操作
         for (let i of this.list) {
           if (i.isSet && i.processId != row.processId) {
@@ -422,14 +432,15 @@
         }
         //是否是取消操作
         if (!cg) {
-          if (!this.sel.processId) this.list.splice(index, 1);
+          console.log(this.sel.processId)
+          console.log(!this.sel.processId)
+          if (!this.sel.routeNo) this.list.splice(index, 1);
           return row.isSet = !row.isSet;
         }
         //提交数据
         if (row.isSet) {
           //项目是模拟请求操作  自己修改下
           const sel = this.sel
-          console.log(sel.processName == null || sel.processName == '')
             if((sel.orderNo == null || sel.orderNo == '') || (sel.processName == null || sel.processName == '') || (sel.controlCodeName == null || sel.controlCodeName == '') || (sel.diploid == null || sel.diploid == '') || (sel.processTeamName == null || sel.processTeamName == '')){
                 return this.$message({
                   type: 'error',
@@ -438,6 +449,13 @@
             }else {
               let data = JSON.parse(JSON.stringify(this.sel));
               for (let k in data) row[k] = data[k]
+              for (let i of this.list) {
+                result.push(i.orderNo)
+              }
+              if(this.getSameNum(this.sel.orderNo,result) > 1){
+                this.$message.warning("工序顺序号不允许重复");
+                return false;
+              }
               this.$message({
                 type: 'success',
                 message: "添加成功!"
